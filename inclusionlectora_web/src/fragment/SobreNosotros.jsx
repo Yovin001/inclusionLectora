@@ -34,8 +34,10 @@ const SobreNosotros = () => {
             <h2 className="titulo-secundario">Equipo del Proyecto</h2>
             <ul className="lista-detallada">
               <li><strong>Desarrollador:</strong> Yovin Stiven Urrego Gómez - <a href="mailto:yovin.urrego@unl.edu.ec">yovin.urrego@unl.edu.ec</a></li>
-              <li><strong>Responsable del Proyecto:</strong> Oscar Miguel Cumbicus Pineda - <a href="mailto:oscar.cumbicus@unl.edu.ec">oscar.cumbicus@unl.edu.ec</a></li>
-              <li><strong>Responsable del Proyecto:</strong> Francisco Javier Alvarez Pineda - <a href="mailto:fjalvarez@unl.edu.ec">fjalvarez@unl.edu.ec</a></li>
+              <li><strong>Docente Involucrado:</strong> Oscar Miguel Cumbicus Pineda - <a href="mailto:oscar.cumbicus@unl.edu.ec">oscar.cumbicus@unl.edu.ec</a></li>
+              <li><strong>Docente Involucrado:</strong> Pablo Fernando Ordoñez Ordoñez - <a href="mailto:fjalvarez@unl.edu.ec">pfordonez@unl.edu.ec</a></li>
+             <li><strong>Docente Involucrado:</strong> Hernán Leonardo Torres Carrión - <a href="mailto:fjalvarez@unl.edu.ec">hltorres@unl.edu.ec</a></li>
+              <li><strong>Docente Involucrado:</strong> Francisco Javier Alvarez Pineda - <a href="mailto:fjalvarez@unl.edu.ec">fjalvarez@unl.edu.ec</a></li>
             </ul>
           </div>
         </section>
