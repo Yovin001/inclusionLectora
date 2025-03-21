@@ -1,21 +1,14 @@
-# Dockerfile para proyecto Express con Node.js 22
-
-FROM node:22
-
-# Establecer el directorio de trabajo en /app
+# Build Stage
+FROM node:22-alpine AS build
 WORKDIR /app
-
-# Copiar los archivos de configuración de la aplicación
-COPY package.json package-lock.json ./
-
-# Instalar las dependencias
+COPY package*.json ./
 RUN npm install
-
-# Copiar el resto de los archivos de la aplicación al directorio de trabajo
 COPY . .
+RUN npm run build
 
-# Exponer el puerto en el que corre la aplicación (por defecto 3000 para Express)
-EXPOSE 3000
-
-# Comando para ejecutar la aplicación
-CMD ["npm", "start"]
+# Production Stage
+FROM nginx:stable-alpine AS production
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
