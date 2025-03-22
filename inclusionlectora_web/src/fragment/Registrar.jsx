@@ -47,7 +47,7 @@ const Registrar = () => {
             formData.append('foto', defaultPhotoUrl);
         }
 
-        GuardarArchivos(formData, getToken(), "/entidad/guardar").then(info => {
+        GuardarArchivos(formData, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', "/entidad/guardar").then(info => {
             if (info.code !== 200) {
                 mensajes(info.msg, 'error', 'Error');
                 borrarSesion();

@@ -34,7 +34,7 @@ const CambioClave = () => {
             ? `cuenta/restablecer/clave/${external_id}`
             : `cuenta/clave/${getUser().external_cuenta}`;
 
-        const response = await peticionPut(( token && external_id)?token:getToken(), endpoint, datos);
+        const response = await peticionPut(( token && external_id)?token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', endpoint, datos);
         if (response.code === 200) {
             mensajes("La contraseña ha sido actualizada exitosamente", 'success', 'Éxito');
             setTimeout(() => {

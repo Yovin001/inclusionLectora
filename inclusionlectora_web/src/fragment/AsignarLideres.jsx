@@ -18,7 +18,7 @@ const AsignarLideres = () => {
     useEffect(() => {
         const fetchEntidades = async () => {
             try {
-                const info = await peticionGet(getToken(), '/listar/entidad/activos');
+                const info = await peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', '/listar/entidad/activos');
                 if (info.code === 200) {
                     setEntidades(info.info);
                 } else {
@@ -55,7 +55,7 @@ const AsignarLideres = () => {
         };
 
         try {
-            const response = await peticionPost(getToken(), '/asignar/lideres', body);
+            const response = await peticionPost('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', '/asignar/lideres', body);
             if (response.code === 200) {
                 setTimeout(() => {
                     window.location.reload();

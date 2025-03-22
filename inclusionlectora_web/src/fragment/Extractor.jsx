@@ -35,13 +35,13 @@ const Extractor = () => {
             setAudioComplete(audioPath);
             setFileURL(`${URLBASE}documentos/${external_id}.pdf`);
             
-            peticionGet(getToken(), `documento/one/${external_id}`).then((info) => {
+            peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `documento/one/${external_id}`).then((info) => {
                 if (info.code === 200) {
                     setAudioName(info.info.nombre);
                 }
             });
 
-            peticionGet(getToken(), `audio/${external_id}`)
+            peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `audio/${external_id}`)
                 .then((info) => {
                     if (info.code === 200) {
                         setLastPlaybackTime(parseFloat(info.info.tiempo_reproduccion));
@@ -86,8 +86,8 @@ const Extractor = () => {
 
         // Verificar si el documento ya existe
         const existingDocumentResponse = await peticionGet(
-            getToken(),
-            `documento/entidad/${getUser().user.id}/${file.name}`
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY',
+            `documento/entidad/1/${file.name}`
         );
 
         if (existingDocumentResponse && existingDocumentResponse.info === true) {
@@ -122,9 +122,9 @@ const Extractor = () => {
         const formData = new FormData();
         formData.append('nombre', file.name);
         formData.append('documento', file);
-        formData.append('id', getUser().user.id);
+        formData.append('id', 1);
 
-        GuardarArchivos(formData, getToken(), "/documento")
+        GuardarArchivos(formData, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', "/documento")
             .then(info => {
                 clearInterval(beepInterval.current);
 
@@ -169,7 +169,7 @@ const Extractor = () => {
         const data = {
             tiempo_reproduccion: currentTime
         };
-        peticionPut(getToken(), `audio/${external_id}`, data);
+        peticionPut('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `audio/${external_id}`, data);
     };
     if (audioNotFound) {
         return (

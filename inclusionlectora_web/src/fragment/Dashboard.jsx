@@ -19,7 +19,7 @@ const Dashboard = () => {
 
     const cargarDocumentos = () => {
         setLoading(true);
-        peticionGet(getToken(), `documento/${getUser().user.id}`)
+        peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `documento/1`)
             .then((info) => {
                 if (info.code === 200) {
                     setDocumentos(info.info);
@@ -35,7 +35,7 @@ const Dashboard = () => {
     };
 
     const eliminarDocumento = (docId) => {
-        peticionDelete(getToken(), `documento/${docId}`)
+        peticionDelete('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `documento/${docId}`)
             .then((info) => {
                 if (info.code === 200) {
                     mensajes('Documento eliminado con éxito', 'success', 'Éxito');

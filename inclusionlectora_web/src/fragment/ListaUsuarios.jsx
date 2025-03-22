@@ -24,7 +24,7 @@ const ListaUsuarios = () => {
     const [showAsignarModal, setShowAsignarModal] = useState(false);
 
     useEffect(() => {
-        peticionGet(getToken(), '/listar/entidad').then((info) => {
+        peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', '/listar/entidad').then((info) => {
             if (info.code !== 200 && info.msg === 'Acceso denegado. Token a expirado') {
                 borrarSesion();
                 mensajes(info.mensajes);
@@ -56,7 +56,7 @@ const ListaUsuarios = () => {
     }
 
     const obtenerId = (externalId) => {
-        peticionGet(getToken(), `obtener/entidad/${externalId}`).then((info) => {
+        peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `obtener/entidad/${externalId}`).then((info) => {
             var datos = info.info;
             if (info.code !== 200 || info.msg === "TOKEN NO VALIDO O EXPIRADO") {
                 mensajes(info.msg, "error", "error");

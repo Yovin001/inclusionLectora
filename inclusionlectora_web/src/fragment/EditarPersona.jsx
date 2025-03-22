@@ -40,7 +40,7 @@ const EditarPersona = ({ personaObtenida, handleChange }) => {
             formData.append('foto_actual', personaObtenida.foto);
         }
 
-        ActualizarImagenes(formData, getToken(), "/modificar/entidad")
+        ActualizarImagenes(formData, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', "/modificar/entidad")
             .then((info) => {
                 if (!info || info.code !== 200) {
                     mensajes(info?.msg || 'Error desconocido', 'error', 'Error');

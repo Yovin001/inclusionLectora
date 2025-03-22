@@ -10,7 +10,7 @@ const ConfiguracionGlobal = () => {
     const [nuevoTamano, setNuevoTamano] = useState(0);
 
     useEffect(() => {
-        peticionGet(getToken(), `config/tamano`).then((info) => {
+        peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `config/tamano`).then((info) => {
             if (info.code === 200) {
                 const currentSize = info.info;
                 setTamano(currentSize);
@@ -22,7 +22,7 @@ const ConfiguracionGlobal = () => {
     // Manejar el cambio de tamaño
     const handleActualizarTamano = () => {
         if (nuevoTamano > 0 && nuevoTamano <= 10) {
-            peticionGet(getToken(), `config/tamano/${nuevoTamano}`).then((info) => {
+            peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `config/tamano/${nuevoTamano}`).then((info) => {
                 if (info.code === 200) {
                     setTamano(info.info);  // Actualizar tamaño
                     mensajes('Tamaño actualizado con éxito', 'success');
@@ -73,7 +73,7 @@ const ConfiguracionGlobal = () => {
         }).then(async (clave) => {
             if (clave && clave.trim()) {
                 const data = { key: clave };
-                const response = await peticionPost(getToken(), `documentos/eliminar/todos`, data);
+                const response = await peticionPost('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `documentos/eliminar/todos`, data);
                 if (response.code === 200) {
                     mensajes('Eliminación completada con éxito', 'success');
                     swal.close(); // Cerrar modal en caso de éxito

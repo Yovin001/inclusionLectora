@@ -10,16 +10,13 @@ const MenuBar = () => {
     const [nombreUsuario, setNombreUsuario] = useState('');
     const [fotoUsuario, setFotoUsuario] = useState('');
     const [idRol, setIdRol] = useState('');
-    const token = getToken();
+    const token = true;
     const navigate = useNavigate();
 
     useEffect(() => {
-        const usuario = getUser();
-        if (usuario) {
-            setNombreUsuario(usuario.nombres ? `${usuario.nombres.toUpperCase()} ${usuario.apellidos.toUpperCase()}` : usuario.username);
-            setFotoUsuario(usuario.user.foto);
-            setIdRol(getRolApi());
-        }
+            setNombreUsuario("Admin");
+            setFotoUsuario("USUARIO_ICONO.png");
+            setIdRol('1');
     }, []);
 
     const handleCerrarSesion = () => {

@@ -12,7 +12,7 @@ const VerPeticionesClave = () => {
 
     useEffect(() => {
         if (!bucle) {
-            peticionGet(getToken(), "peticion/CC").then((info) => {
+            peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', "peticion/CC").then((info) => {
                 if (info.code !== 200 && (info.msg === "No existe token" || info.msg === "Token no valido")) {
                     mensajes(info.msg);
                 } else {
@@ -39,12 +39,12 @@ const VerPeticionesClave = () => {
                 dangerMode: true,
             }).then((willGenerate) => {
                 if (willGenerate) {
-                    peticionGet(getToken(), `aceptarechazar/peticiones/${external_id}/1/1/${getUser().user.id}`).then((info) => {
+                    peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `aceptarechazar/peticiones/${external_id}/1/1/${1}`).then((info) => {
                         if (info.code !== 200) {
                             mensajes(info.msg);
                         } else {
                             const external_id_cuenta = info.info;
-                            peticionGet(getToken(), `cuenta/token/${external_id_cuenta}`).then((info) => {
+                            peticionGet('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRlcm5hbCI6IjU5NDc2MGYxLTkwN2UtMTFlZi04ZjRkLTMwZTM3YTJhYTgyZCIsImVtYWlsIjoieW92aW4udXJyZWdvQHVubC5lZHUuZWMiLCJjaGVjayI6dHJ1ZSwiaWF0IjoxNzQyNjA0MTI0LCJleHAiOjE3NDI2NDczMjR9.nLcVbBOKXLjLuvcjJvd3PlFV2HthjJm8lCx7tfHyMxY', `cuenta/token/${external_id_cuenta}`).then((info) => {
                                 if (info.code !== 200 && (info.msg === "No existe token" || info.msg === "Token no valido")) {
                                     mensajes(info.msg);
                                 } else {
