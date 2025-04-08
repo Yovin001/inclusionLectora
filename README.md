@@ -44,19 +44,6 @@ Este proyecto busca facilitar la inclusión digital mediante una plataforma que 
 
 ---
 
-### C. Modelo del sistema
-
-#### Modelo de dominio  
-Incluye el diagrama que representa las entidades principales del sistema y sus relaciones.
-
-#### Diagrama de clases  
-(Insertar aquí una imagen o enlace al diagrama si está disponible)
-
-#### Modelo de despliegue  
-(Insertar aquí el diagrama o descripción del entorno de ejecución y servidores utilizados)
-
----
-
 ## 🚀 Contribuciones
 
 ¡Contribuciones son bienvenidas! Si deseas colaborar, por favor realiza un fork del repositorio, crea una nueva rama, realiza tus cambios y abre un pull request.
