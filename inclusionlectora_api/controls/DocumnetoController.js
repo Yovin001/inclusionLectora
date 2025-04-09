@@ -86,7 +86,7 @@ class DocumentoController {
             },
             {
                 headers: {
-                    Authorization: 'Bearer secret_qKmX27OnQcMWpCMk',
+                    Authorization: 'Bearer secret_UdQNNpUqjwgLuS7j',
                     'Content-Type': 'application/json'
                 }
             }
