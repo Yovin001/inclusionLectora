@@ -1,5 +1,5 @@
-const URL_BACKEND = "https://computacion.unl.edu.ec/lecyov:3007/api"
-export const URLBASE = "https://computacion.unl.edu.ec/lecyov:3007/"; 
+const URL_BACKEND = "https://computacion.unl.edu.ec/lecyov/api/api"
+export const URLBASE = "https://computacion.unl.edu.ec/lecyov/api"; 
 
 export const loginpost = async (formData, URL) => {
     const headers = {
