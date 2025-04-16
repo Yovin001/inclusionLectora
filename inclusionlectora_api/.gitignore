@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/public/images/users/
 /public/documentos/
 /public/audio/completo/
 /public/audio/partes/
