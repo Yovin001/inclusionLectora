@@ -40,13 +40,13 @@ const MenuBar = () => {
                             <>
                                 {idRol === '1' && (
                                     <>
-                                    <Nav.Link href="/configuracion" className="text-white">Configuraciones</Nav.Link>
-                                    <Nav.Link href="/peticiones/clave" className="text-white">Peticiones Claves</Nav.Link>
+                                    <Nav.Link href="/lecyov/configuracion" className="text-white">Configuraciones</Nav.Link>
+                                    <Nav.Link href="/lecyov/peticiones/clave" className="text-white">Peticiones Claves</Nav.Link>
                                     </>
                                 )}
-                                <Nav.Link href="/extraer/new" className="text-white">Extraer PDF</Nav.Link>
-                                <Nav.Link href="/dashboard" className="text-white">Documentos</Nav.Link>
-                                <Nav.Link href="/contactanos" className="text-white">Información</Nav.Link>
+                                <Nav.Link href="/lecyov/extraer/new" className="text-white">Extraer PDF</Nav.Link>
+                                <Nav.Link href="/lecyov/dashboard" className="text-white">Documentos</Nav.Link>
+                                <Nav.Link href="/lecyov/contactanos" className="text-white">Información</Nav.Link>
                             </>
                         )}
                     </Nav>
@@ -63,7 +63,7 @@ const MenuBar = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu align="end">
-                            <Dropdown.Item href="/perfil">Perfil</Dropdown.Item>
+                            <Dropdown.Item href="/lecyov/perfil">Perfil</Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleCerrarSesion}>Cerrar sesión</Dropdown.Item>
                          </Dropdown.Menu>
