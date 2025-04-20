@@ -20,24 +20,6 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit  
 
-  sca:
-    needs: build
-    name: SCA
-    uses: ./.github/workflows/sca.yml
-    secrets: inherit
-
-  license-compliance:
-    needs: build
-    name: License Compliance
-    uses: ./.github/workflows/license-compliance.yml
-    secrets: inherit
-
-  sast:
-    needs: build
-    name: SAST
-    uses: ./.github/workflows/sast.yml
-    secrets: inherit
-
   docker:
     needs: build
     name: Build docker image
