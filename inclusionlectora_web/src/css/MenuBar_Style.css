@@ -1,0 +1,100 @@
+/* Franja superior */
+.custom-navbar {
+    background-color: var(--azul-oscuro);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-unl {
+    height: 50px;
+}
+
+/* Botón ☰ para móviles */
+.menu-toggle {
+    font-size: 24px;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: none; /* visible solo en móviles */
+}
+
+/* Franja secundaria (navegación) */
+.custom-navbar-secondary {
+    background-color: var(--azul-intermedio);
+    padding: 10px 20px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.custom-navbar-secondary.open {
+    display: flex;
+}
+
+.navbar-center {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.nav-button {
+    background-color: var(--azul-intermedio);
+    border: 1px solid var(--azul-oscuro);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.nav-button:hover {
+    background-color: var(--azul-intermedio);
+    color: white;
+}
+
+.navbar-user-dropdown .user-avatar-btn {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Escritorio */
+@media (min-width: 768px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    .custom-navbar-secondary {
+        display: flex !important;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .navbar-center {
+        flex-direction: row;
+    }
+}
+
+/* Móvil */
+@media (max-width: 767px) {
+    .menu-toggle {
+        display: block;
+    }
+}
