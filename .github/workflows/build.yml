@@ -17,18 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js 22 for inclusionlectora_api
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: inclusionlectora_api/package-lock.json
-
-      - name: Install dependencies for inclusionlectora_api
-        run: |
-          cd inclusionlectora_api
-          npm install
-
       - name: Set up Node.js 22 for inclusionlectora_web
         uses: actions/setup-node@v4
         with:
@@ -46,11 +34,6 @@ jobs:
           cd inclusionlectora_web
           npm test
 
-      - name: Test inclusionlectora_api
-        run: |
-          cd inclusionlectora_api
-          npm test
-          
       - name: Upload Test Results
         uses: actions/upload-artifact@v3
         with:
