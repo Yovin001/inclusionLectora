@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "jest",
-    "start": "./node_modules/nodemon/bin/nodemon.js ./bin/www"
+    "test": "./node_modules/nodemon/bin/nodemon.js ./bin/www",
+    "start": "node ./bin/www"
   },
   "keywords": [],
   "author": "",
