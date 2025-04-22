@@ -292,7 +292,7 @@ const Extractor = () => {
                                             className="btn-positivo text-white"
                                             onClick={() => {
                                                 const link = document.createElement('a');
-                                                link.href = `${URLBASE}api/docx/descargar/${external_id}.docx`;
+                                                link.href = `${URLBASE}api/pdf2docx/${external_id}.pdf`;
                                                 link.download = audioName ? `${audioName}.docx` : "doc.docx";
                                                 document.body.appendChild(link);
                                                 link.click();

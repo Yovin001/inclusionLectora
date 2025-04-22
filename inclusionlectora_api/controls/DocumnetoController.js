@@ -2,10 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const pdfParse = require('pdf-parse');
 const gtts = require('gtts');
-const uuid = require('uuid');
 const { exec } = require('child_process');
 const models = require('../models');
-const axios = require('axios');
+const { PythonShell } = require('python-shell');
 
 const saveAudioWithRetries = async (gttsInstance, filePath, retries = 1) => {
     for (let attempt = 1; attempt <= retries; attempt++) {
@@ -45,8 +44,75 @@ const guardarAudioPorLotes = async (chunks, documentoNameCifrado, audioDir, batc
 
     return audioFilePaths;
 };
+function runPythonScript(pdfPath, docxPath, scriptPath) {
+    const options = {
+        mode: 'text',
+        pythonOptions: ['-u'],
+        args: [pdfPath, docxPath]
+    };
+
+    PythonShell.run(scriptPath, options, (err, results) => {
+        if (err) {
+            console.error("Error en PythonShell:", err);
+        } else {
+            console.log("Python script finalizó:", results);
+        }
+    });
+}
+
+// Verifica periódicamente si existe el archivo
+function esperarArchivo(filePath, callback, timeout = 90000, intervalo = 500) {
+    const startTime = Date.now();
+
+    const intervalId = setInterval(() => {
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (!err) {
+                clearInterval(intervalId);
+                return callback(null, true);
+            }
+
+            if (Date.now() - startTime > timeout) {
+                clearInterval(intervalId);
+                return callback(new Error("Archivo no encontrado a tiempo"), false);
+            }
+        });
+    }, intervalo);
+}
 
 class DocumentoController {
+
+    async convertirPdfADocx(req, res) {
+        try {
+            if (!req.params.filename) {
+                return res.status(400).json({ msg: "No se ha proporcionado un PDF", code: 400 });
+            }
+            const pdfPath = path.join(__dirname, '../public/documentos/', req.params.filename);
+            const docxPath = pdfPath.replace(/\.pdf$/, '.docx');
+            const pythonScriptPath = path.join(__dirname, '../scripts/convert_pdf_to_docx.py');
+
+            // Ejecutar el script sin esperar resultado
+            runPythonScript(pdfPath, docxPath, pythonScriptPath);
+
+            // Esperar que aparezca el archivo generado
+            esperarArchivo(docxPath, (err) => {
+                if (err) {
+                    console.error("Archivo .docx no encontrado:", err);
+                    return res.status(500).json({ msg: "Error: el archivo no se generó a tiempo", error: err.message });
+                }
+                res.download(docxPath, (err) => {
+                    if (err) {
+                        console.error("Error al descargar:", err);
+                        return;
+                    }
+                    fs.unlink(docxPath, () => { });
+                });
+            });
+        } catch (error) {
+            console.error("Error general:", error);
+            return res.status(500).json({ msg: "Error interno del servidor", error: error.message });
+        }
+    }
+
     async guardar(req, res) {
         let transaction = await models.sequelize.transaction();
 
@@ -62,48 +128,6 @@ class DocumentoController {
             const txtFileName = documentoNameCifrado.replace(/\.pdf$/, '.txt');
             const carpetaName = documentoNameCifrado.replace(/\.pdf$/, '');
             const txtFilePath = path.join(__dirname, '../public/documentos/', txtFileName);
-                   // Convertir archivo PDF a Base64 para enviarlo a la API
-        const base64File = fileBuffer.toString('base64');
-        const docxFilePath = pdfFilePath.replace(/\.pdf$/, '.docx');
-
-        // Llamar a la API de ConvertApi para transformar PDF a DOCX
-        const convertApiResponse = await axios.post(
-            'https://us-v2.convertapi.com/convert/pdf/to/docx',
-            {
-                Parameters: [
-                    {
-                        Name: 'File',
-                        FileValue: {
-                            Name: documentoNameCifrado,
-                            Data: base64File
-                        }
-                    },
-                    {
-                        Name: 'StoreFile',
-                        Value: true
-                    }
-                ]
-            },
-            {
-                headers: {
-                    Authorization: 'Bearer secret_UdQNNpUqjwgLuS7j',
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-
-        if (!convertApiResponse.data || !convertApiResponse.data.Files || convertApiResponse.data.Files.length === 0) {
-            throw new Error('Error en la conversión del archivo PDF a DOCX.');
-        }
-
-        const docxUrl = convertApiResponse.data.Files[0].Url;
-
-        // Descargar el archivo DOCX generado
-        const docxResponse = await axios.get(docxUrl, { responseType: 'arraybuffer' });
-        fs.writeFileSync(docxFilePath, docxResponse.data);
-
-        console.log('Archivo convertido a DOCX en:', docxFilePath);
-
             const audioDir = path.join(__dirname, `../public/audio/partes/${carpetaName}`);
             // Recorta el nombre si tiene más de 80 caracteres
             if (req.body.nombre.length > 80) {

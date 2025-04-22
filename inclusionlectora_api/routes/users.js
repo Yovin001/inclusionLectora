@@ -237,6 +237,8 @@ router.get('/audio/descargar/:filename', (req, res) => {
   });
 });
 
+router.get('/pdf2docx/:filename', documentoController.convertirPdfADocx);
+
 router.get('/docx/descargar/:filename', (req, res) => {
   const filePath = path.join(__dirname, '../public/documentos/', req.params.filename); 
   res.download(filePath, (err) => {

@@ -1,20 +1,17 @@
 {
   "homepage": "lecyov",
   "name": "inclusionlectora_web",
-  "version": "0.1.0",
+  "version": "1.0.2",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@popperjs/core": "^2.11.8",
-    "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
-    "boxicons": "^2.1.4",
+    "date-fns": "^4.1.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
-    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
     "react-router-dom": "^6.26.2",
@@ -41,12 +38,11 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
-    "jest": "^27.5.1",
-    "@eslint/js": "^9.17.0",
-    "globals": "^15.14.0",
     "eslint": "^9.17.0",
-    "eslint-plugin-react": "^7.37.2"
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.14.0"
   }
 }
