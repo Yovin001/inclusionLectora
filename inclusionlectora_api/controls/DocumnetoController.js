@@ -6,6 +6,8 @@ const { exec } = require('child_process');
 const models = require('../models');
 const { PythonShell } = require('python-shell');
 
+const docxExpirations = new Map(); 
+
 const saveAudioWithRetries = async (gttsInstance, filePath, retries = 1) => {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
@@ -78,6 +80,22 @@ function esperarArchivo(filePath, callback, timeout = 90000, intervalo = 500) {
         });
     }, intervalo);
 }
+function programarEliminacion(filePath, tiempoMs = 1 * 60 * 1000) {
+    if (docxExpirations.has(filePath)) return; // Ya programado
+
+    const timeoutId = setTimeout(() => {
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error("Error eliminando archivo:", filePath, err);
+            } else {
+                console.log("Archivo eliminado automáticamente:", filePath);
+            }
+            docxExpirations.delete(filePath);
+        });
+    }, tiempoMs);
+
+    docxExpirations.set(filePath, timeoutId);
+}
 
 class DocumentoController {
 
@@ -89,22 +107,28 @@ class DocumentoController {
             const pdfPath = path.join(__dirname, '../public/documentos/', req.params.filename);
             const docxPath = pdfPath.replace(/\.pdf$/, '.docx');
             const pythonScriptPath = path.join(__dirname, '../scripts/convert_pdf_to_docx.py');
-
-            // Ejecutar el script sin esperar resultado
-            runPythonScript(pdfPath, docxPath, pythonScriptPath);
-
-            // Esperar que aparezca el archivo generado
-            esperarArchivo(docxPath, (err) => {
-                if (err) {
-                    console.error("Archivo .docx no encontrado:", err);
-                    return res.status(500).json({ msg: "Error: el archivo no se generó a tiempo", error: err.message });
+            // Si el archivo ya existe, saltamos la conversión y lo servimos
+            fs.access(docxPath, fs.constants.F_OK, (err) => {
+                if (!err) {
+                    console.log("Archivo ya existe, descargando sin reconvertir:", docxPath);
+                    return res.download(docxPath);
                 }
-                res.download(docxPath, (err) => {
+                // No existe, lo generamos
+                runPythonScript(pdfPath, docxPath, pythonScriptPath);
+
+                // Esperamos que se genere
+                esperarArchivo(docxPath, (err) => {
                     if (err) {
-                        console.error("Error al descargar:", err);
-                        return;
+                        console.error("Archivo .docx no encontrado:", err);
+                        return res.status(500).json({ msg: "Error: el archivo no se generó a tiempo", error: err.message });
                     }
-                    fs.unlink(docxPath, () => { });
+
+                    res.download(docxPath, (err) => {
+                        if (err) {
+                            console.error("Error al descargar:", err);
+                        }
+                        programarEliminacion(docxPath); // Se programa la eliminación
+                    });
                 });
             });
         } catch (error) {
