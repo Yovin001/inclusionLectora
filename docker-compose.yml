@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3007:3007"
+    restart: always
     environment:
       - NODE_ENV=development
       - DB_HOST=db
@@ -21,6 +22,7 @@ services:
       - backend_data:/usr/src/app/storage
 
   frontend:
+  
     build:
       context: ./inclusionlectora_web
       dockerfile: Dockerfile
@@ -30,9 +32,11 @@ services:
       - backend
     networks:
       - app-network
+    restart: always
 
   db:
     image: mysql:latest
+    restart: always
     environment:
       MYSQL_DATABASE: inclusionlectora_db
       MYSQL_USER: desarrollo
