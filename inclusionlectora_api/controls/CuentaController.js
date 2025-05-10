@@ -1,3 +1,5 @@
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 var models = require('../models')
 var cuenta = models.cuenta;
 
@@ -8,6 +10,17 @@ const saltRounds = 8;
 
 let jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
+
+// Transportador con Gmail
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL, 
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+  
+
 const esClaveValida = function (clave, claveUser) {
     return bcrypt.compareSync(claveUser, clave);
 }
@@ -249,48 +262,7 @@ class CuentaController {
         }
     }
 
-
-    async tokenCambioClave(req, res) {
-        if (!req.params.external_id) {
-            return res.status(400).json({
-                msg: "FALTAN DATOS",
-                code: 400
-            });
-        } else {
-            const cuenta = await models.cuenta.findOne({ where: { external_id: req.params.external_id } });
-            if (cuenta) {
-                const tokenData = {
-                    external: cuenta.external_id,
-                    email: cuenta.correo,
-                    check: true
-                };
-
-                require('dotenv').config();
-                const llave = process.env.KEY;
-                const token = jwt.sign(
-                    tokenData,
-                    llave,
-                    {
-                        expiresIn: '10m'
-                    });
-                return res.status(200).json({
-                    msg: "Token generado",
-                    info: {
-                        token: token
-                    },
-                    code: 200
-                })
-            } else {
-                return res.status(400).json({
-                    msg: "CUENTA NO ENCONTRADA",
-                    code: 400
-                });
-            }
-        }
-    }
-
-    async validarCambioClave(req, res) {
-        const transaction = await models.sequelize.transaction();
+    async  solicitudCambioClaveAutomatica(req, res) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -300,38 +272,66 @@ class CuentaController {
                     errors: errors.array()
                 });
             }
-            const cuenta = await models.cuenta.findOne({ where: { correo: req.body.correo, estado: "ACEPTADO" } });
+    
+            const cuenta = await models.cuenta.findOne({
+                where: { correo: req.body.correo, estado: "ACEPTADO" }, include: [
+                                    {
+                                        model: models.entidad,
+                                        as: 'entidad',
+                                        attributes: ['nombres', 'apellidos'],
+                                    },
+                                ],
+            });
+    
             if (!cuenta) {
                 return res.status(200).json({
-                    code: 200
+                    code: 200,
+                    msg: "Cuenta no encontrada o no aceptada"
                 });
-            } else {
-                var listar = await models.peticion.findOne({ where: { estado: 'ES', tipo: "CC", id_cuenta: cuenta.id } });
-                if (listar) {
-                    return res.status(200).json({
-                        code: 200, msg: "Ya existe una petición en espera"
-                    });
-                } else {
-                    const peticion = {
-                        peticion: "Cambio de Clave",
-                        tipo: "CC",
-                        id_cuenta: cuenta.id
-                    };
-                    await models.peticion.create(peticion), { transaction };
-                    await transaction.commit();
-                    res.json({ code: 200 });
-                }
             }
-
+    
+            // Genera el token
+            const tokenData = {
+                external: cuenta.external_id,
+                email: cuenta.correo,
+                check: true
+            };
+            const token = jwt.sign(tokenData, process.env.KEY, { expiresIn: '10m' });
+    
+            // Construye el enlace de restablecimiento
+            const enlace = `${process.env.URL_APP}cambio/clave/restablecer/${cuenta.external_id}/${token}`;
+            const nombreUsuario = cuenta.entidad.nombres+ " "+cuenta.entidad.apellidos || 'usuario';
+    
+            // Envía el correo
+            const mailOptions = {
+                from: `"Inclusión Lectora" <${process.env.EMAIL_USER}>`,
+                to: cuenta.correo,
+                subject: 'Solicitud de cambio de clave',
+                html: `
+                    <h3>Hola, ${nombreUsuario}</h3>
+                    <p>Hemos recibido una solicitud para cambiar tu contraseña.</p>
+                    <p>Puedes restablecer tu clave haciendo clic en el siguiente enlace:</p>
+                    <a href="${enlace}">${enlace}</a>
+                    <p>Este enlace expirará en 10 minutos.</p>
+                    <p>Si no realizaste esta solicitud, ignora este mensaje.</p>
+                `
+            };
+    
+            await transporter.sendMail(mailOptions);
+    
+            return res.status(200).json({
+                code: 200,
+                msg: "Correo enviado con el enlace de restablecimiento"
+            });
+    
         } catch (error) {
-            console.log(error);
+            console.error("Error en solicitud de cambio de clave:", error);
             return res.status(500).json({
                 msg: "Error en el servidor",
                 code: 500
             });
         }
     }
-
 
 }
 module.exports = CuentaController;

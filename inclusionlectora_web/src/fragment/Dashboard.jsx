@@ -8,6 +8,7 @@ import { getToken, getUser } from '../utilities/Sessionutil';
 import mensajes from '../utilities/Mensajes';
 import MenuBar from './MenuBar';
 import { useNavigate } from 'react-router-dom';
+import '../css/style.css';
 
 const Dashboard = () => {
     const navigate = useNavigate();

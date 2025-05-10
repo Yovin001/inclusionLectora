@@ -296,9 +296,8 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
 });
 
-router.get('/cuenta/token/:external_id', limiter, auth({ checkAdmin: true }), cuentaController.tokenCambioClave)
-router.put('/cuenta/validar',[
-  body('correo', 'Ingrese un correo valido').exists().not().isEmpty().isEmail()], cuentaController.validarCambioClave)
+router.put('/cuenta/solicitud/cambio/clave',[
+  body('correo', 'Ingrese un correo valido').exists().not().isEmpty().isEmail()], cuentaController.solicitudCambioClaveAutomatica)
 
 /** PETICION */
 router.get('/peticion/:tipo', peticionController.listarPeticiones);

@@ -5,10 +5,9 @@ import MenuBar from './MenuBar';
 
 const SobreNosotros = () => {
   return (
-    <div>
-      <header>
+    <>
+
         <MenuBar />
-      </header>
 
       <main className="sobre-nosotros">
         <section className="hero">
@@ -48,7 +47,7 @@ const SobreNosotros = () => {
           </div>
         </footer>
       </main>
-    </div>
+    </>
   );
 };
 
