@@ -68,8 +68,7 @@ const MenuBar = () => {
                         {idRol === '1' && (
                             <>
                                 <Button href="/lecyov/configuracion" className="nav-button" aria-label="Configuraciones del sistema">Configuraciones</Button>
-                                <Button href="/lecyov/peticiones/clave" className="nav-button" aria-label="Peticiones de claves de acceso" >Peticiones Claves</Button>
-                            </>
+                           </>
                         )}
                         <Button href="/lecyov/extraer/new" className="nav-button" aria-label="Extraer contenido de PDF">Extraer PDF</Button>
                         <Button href="/lecyov/dashboard" className="nav-button" aria-label="Ver documentos procesados">Documentos</Button>

@@ -59,6 +59,7 @@ const Extractor = () => {
               <AudioPlayer 
                 audioComplete={audioComplete} 
                 audioName={audioName} 
+                external_id={external_id}
               />
             </section>
 

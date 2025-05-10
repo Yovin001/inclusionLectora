@@ -73,18 +73,26 @@
   
   /* === Estilos de botones personalizados globales === */
   button.verde {
-    background-color: #4CAF50;
+    background-color: var(--verde-claro);
     color: white;
     padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15); /* sombra sutil */
   }
   
   button.verde:hover {
-    background-color: #45a049;
+    background-color: var(--verde-pastel);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); /* sombra un poco más fuerte al pasar el mouse */
+  }
+  .extractor-extras-controls {
+    display: flex;
+    gap: 1rem; /* espacio entre los botones */
+    justify-content: center; /* centra horizontalmente */
+    flex-wrap: wrap; /* permite que se acomoden en varias líneas si no hay espacio */
   }
   
   button.azul {
@@ -95,7 +103,12 @@
     border-radius: 6px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  
+  button.azul:hover {
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
   }
   
   button.azul:hover {
@@ -109,5 +122,41 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
+  }
+  
+  /* === Estilos de carga de archivos === */
+  .file-upload-label {
+    background-color: white;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    max-width: 400px;
+    height: 13rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px dashed #d1d5db;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .file-upload-label svg {
+    width: 2.75rem;
+    margin-bottom: 0.75rem;
+    fill: #6b7280;
+  }
+  
+  .file-upload-label p {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+  }
+  
+  .file-upload-input {
+    display: none;
   }
   

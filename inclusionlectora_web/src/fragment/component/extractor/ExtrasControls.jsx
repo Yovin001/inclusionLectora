@@ -6,8 +6,15 @@ import '../../../css/Extractor_Style.css';
 
 const ExtrasControls = ({ external_id, audioName, fileURL, showPdf, setShowPdf }) => {
   return (
-    <div className="extractor-extras-controls">
-      <Button className="verde"
+    <section
+      className="extractor-extras-controls"
+      aria-label="Controles de descarga y visualización"
+      role="region"
+    >
+      <Button
+        type="button"
+        className="verde"
+        aria-label={`Descargar el audio ${audioName}`}
         onClick={() => {
           const link = document.createElement('a');
           link.href = `${URLBASE}api/audio/descargar/${external_id}.mp3`;
@@ -15,10 +22,13 @@ const ExtrasControls = ({ external_id, audioName, fileURL, showPdf, setShowPdf }
           link.click();
         }}
       >
-        DESCARGAR AUDIO
+        Descargar audio
       </Button>
 
-      <Button className="verde"
+      <Button
+        type="button"
+        className="verde"
+        aria-label={`Descargar el documento en formato Word del archivo ${audioName}`}
         onClick={() => {
           const link = document.createElement('a');
           link.href = `${URLBASE}api/pdf2docx/${external_id}.pdf`;
@@ -26,13 +36,18 @@ const ExtrasControls = ({ external_id, audioName, fileURL, showPdf, setShowPdf }
           link.click();
         }}
       >
-        DESCARGAR DOCX
+        Descargar DOCX
       </Button>
 
-      <Button className="azul" onClick={() => setShowPdf(!showPdf)}>
-        {showPdf ? 'OCULTAR PDF' : 'VER PDF'}
+      <Button
+        type="button"
+        className="verde"
+        aria-label={showPdf ? 'Ocultar vista del PDF' : 'Mostrar vista del PDF'}
+        onClick={() => setShowPdf(!showPdf)}
+      >
+        {showPdf ? 'Ocultar PDF' : 'Ver PDF'}
       </Button>
-    </div>
+    </section>
   );
 };
 
