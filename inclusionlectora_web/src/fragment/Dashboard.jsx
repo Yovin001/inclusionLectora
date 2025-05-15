@@ -4,7 +4,7 @@ import { Button, Modal, FormControl, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { peticionGet, peticionDelete } from '../utilities/hooks/Conexion';
-import { getToken, getUser } from '../utilities/Sessionutil';
+import { borrarSesion, getToken, getUser } from '../utilities/Sessionutil';
 import mensajes from '../utilities/Mensajes';
 import MenuBar from './MenuBar';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,13 @@ const Dashboard = () => {
             .then((info) => {
                 if (info.code === 200) {
                     setDocumentos(info.info);
+                } else if (
+                    info.msg.toLowerCase().includes("token")
+                ) {
+                    borrarSesion();
+                    navigate('/login');
                 }
+                
             })
             .catch((error) => {
                 console.error('Error al cargar documentos:', error);

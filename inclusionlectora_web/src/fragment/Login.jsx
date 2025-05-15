@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Login_Style.css';
 import { InicioSesion } from '../utilities/hooks/Conexion';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { saveCorreo, saveRolApi, saveToken, saveUser } from '../utilities/Sessionutil';
+import { getToken, saveCorreo, saveRolApi, saveToken, saveUser } from '../utilities/Sessionutil';
 import mensajes from '../utilities/Mensajes';
 import logoUNL from '../img/Logo_UNL.png';
 import logoCarrera from '../img/LogoCarrera.png';
@@ -16,7 +16,14 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => setShowPassword(prev => !prev);
-
+    // Verifica si ya hay sesión activa
+    useEffect(() => {
+        const token = localStorage.getItem("token"); // O usa getToken() si la tienes
+        if (token) {
+            navigate("/dashboard");
+        }
+    }, [navigate]);
+    
     const onSubmit = (data) => {
         const datos = {
             correo: data.correo,

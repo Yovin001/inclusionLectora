@@ -3,19 +3,27 @@ import MenuBar from './MenuBar';
 import swal from 'sweetalert';
 import { peticionGet, peticionPost } from '../utilities/hooks/Conexion';
 import mensajes from '../utilities/Mensajes';
-import { getToken } from '../utilities/Sessionutil';
+import { borrarSesion, getToken } from '../utilities/Sessionutil';
+import { useNavigate } from 'react-router-dom';
 
 const ConfiguracionGlobal = () => {
     const [tamano, setTamano] = useState(0);
     const [nuevoTamano, setNuevoTamano] = useState(0);
-
+   const navigate = useNavigate();
     useEffect(() => {
         peticionGet(getToken(), `config/tamano`).then((info) => {
             if (info.code === 200) {
                 const currentSize = info.info;
                 setTamano(currentSize);
                 setNuevoTamano(currentSize); // Inicializar con el tamaño actual
+            } else if (
+                info.msg.toLowerCase().includes("token")||
+                info.msg ==="Acceso denegado: No tiene permisos de administrador"
+            ) {
+                borrarSesion();
+                navigate('/login');
             }
+
         });
     }, []);
 
@@ -118,7 +126,7 @@ const ConfiguracionGlobal = () => {
                                 }}
                                 style={{ maxWidth: '150px' }}
                             />
-                          
+
                             <button className="btn-positivo text-white" type="submit" onClick={handleActualizarTamano}>
                                 Cambiar tamaño
                             </button>
@@ -134,11 +142,11 @@ const ConfiguracionGlobal = () => {
 
                         {/* Eliminar documentos */}
                         <div className="d-flex align-items-center w-100">
-                        <div className="me-3">
+                            <div className="me-3">
                                 <strong>Eliminación de documentos:</strong>
                                 <br />
                                 <small className="text-danger fw-bold">
-                                    Esta acción eliminará todos los archivos del sistema. 
+                                    Esta acción eliminará todos los archivos del sistema.
                                     Proceda con precaución.
                                 </small>
                             </div>
