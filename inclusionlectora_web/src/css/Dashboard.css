@@ -1,0 +1,136 @@
+/* Contenedor de las tarjetas tipo grid */
+.document-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 576px) {
+    .document-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .document-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .document-card {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .document-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  .document-text {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+  }
+  
+  .document-date {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  
+  .document-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .document-card {
+    background-color: #e4e4e4;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    word-break: break-word;  /* ← Para cortar texto largo tipo "Solicitud_recuperación..." */
+  }
+  
+
+.document-card:hover {
+  background-color: #dcd6f7;
+}
+
+
+
+
+.document-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.document-date {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.document-card-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botón ver: ocupa todo el espacio que quede */
+.document-view {
+  flex: 1;                  /* ocupa espacio flexible */
+  background: none;
+  border: none;
+  text-align: left;         /* que el texto quede alineado */
+  padding: 0;               /* o ajusta un poquito si lo necesitas */
+  cursor: pointer;
+}
+
+/* Botón eliminar: igual que tenías */
+.document-delete {
+  background: none; /* Color personalizado */
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--azul-intermedio); /* o el color que desees para el ícono */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 30px;
+}
+
+
+.document-view:focus {
+  outline: 2px solid #5555ff;
+  border-radius: 4px;
+}
+
+
+.document-delete:hover {
+  color: #a71d2a;
+}
+.document-card:focus {
+    outline: 3px solid #5555ff; /* o tu color de accesibilidad */
+    border-radius: 8px;
+  }
+ 
+  .document-delete:focus {
+    outline: 2px solid #ff0000;
+  }
+  
+
+  

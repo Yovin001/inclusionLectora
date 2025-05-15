@@ -25,7 +25,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <main className="App">
       <Routes>
         <Route path='*' element={ <Navigate to='/login' />} />
         <Route path='/registrar' element={<Registrar />} />
@@ -41,7 +41,7 @@ function App() {
         <Route path='/contactanos' element={<MiddewareSesion><SobreNosotros/></MiddewareSesion>} />
         <Route path='/configuracion' element={<MiddewareSesion><ConfiguracionGlobal/></MiddewareSesion>} />
       </Routes>
-    </div>
+    </main>
   );
 } 
 

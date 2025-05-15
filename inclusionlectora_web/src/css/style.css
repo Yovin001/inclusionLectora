@@ -72,20 +72,46 @@ label{
 }
 
 
-/*Contenedor*/
+/*Contenedor general*/
 .contenedor-centro {
-  display: flex; justify-content: center; margin: 100px 40px 0;
+  display: flex;
+  justify-content: center;
+  margin: 100px 40px 0;
 }
 
-.contenedor-carta, .contenedor-carta-columna {
+/*Cartas y columnas*/
+.contenedor-carta,
+.contenedor-carta-columna {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
-  background-color: transparent; padding: 25px; width: 100%;
+  background-color: transparent;
+  padding: 25px;
+  width: 100%;
 }
-.contenedor-carta-columna{
+
+.contenedor-carta-columna {
   flex-direction: column;
   justify-content: center;
   align-content: center;
 }
+
+/* Ajuste para pantallas pequeñas (menos de 768px) */
+@media (max-width: 768px) {
+  .contenedor-centro {
+    margin: 40px 10px 0;
+  }
+
+  .contenedor-carta,
+  .contenedor-carta-columna {
+    width: 100%;
+    max-width: none;
+    padding: 15px;
+  }
+
+  .document-grid {
+    grid-template-columns: 1fr !important; /* si usas grid */
+  }
+}
+
 
 .contenedor-filo {
   display: flex; 
