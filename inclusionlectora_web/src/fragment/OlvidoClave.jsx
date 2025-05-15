@@ -15,7 +15,7 @@ const OlvidoClave = () => {
         const datos = {
            correo: data.correo
         };
-        const response = await peticionPut('', 'cuenta/validar', datos);
+        const response = await peticionPut('', '/cuenta/solicitud/cambio/clave', datos);
         if (response.code === 200) {
             mensajes(`Se ha enviado un enlace de restablecimiento a ${data.correo}`, 'success', 'Éxito');
             setTimeout(() => {
