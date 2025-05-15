@@ -15,7 +15,7 @@ const OlvidoClave = () => {
         const datos = {
            correo: data.correo
         };
-        const response = await peticionPut('', 'cuenta/validar', datos);
+        const response = await peticionPut('', '/cuenta/solicitud/cambio/clave', datos);
         if (response.code === 200) {
             mensajes(`Se ha enviado un enlace de restablecimiento a ${data.correo}`, 'success', 'Éxito');
             setTimeout(() => {
@@ -30,7 +30,7 @@ const OlvidoClave = () => {
         <div className="container-fluid d-flex justify-content-center align-items-center custom-container-register">
             <div className="register-container">
                 <div className="text-center mb-4">
-                    <img src="/logo192.png" alt="RunQA" style={{ width: '150px' }} />
+                    <img src="/logo192.png" alt="Inclusion Lectora" style={{ width: '150px' }} />
                 </div>
                 <h2 className="text-center mb-4 titulo-primario">Cambio de Clave</h2>
                 <p className="text-center">
