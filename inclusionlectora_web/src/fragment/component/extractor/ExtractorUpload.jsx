@@ -1,15 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { GuardarArchivos, peticionGet, URLBASE } from '../../../utilities/hooks/Conexion';
 import { getToken, getUser } from '../../../utilities/Sessionutil';
-import {mensajesSinRecargar} from '../../../utilities/Mensajes';
-import swal from 'sweetalert';
+import { mensajesSinRecargar } from '../../../utilities/Mensajes';
+import Modal from 'react-modal';
 import '../../../css/Extractor_Style.css';
+import '../../../css/ExtractorModal_Style.css'; // Nuevo archivo CSS para el modal
 import { Button } from 'react-bootstrap';
+
+Modal.setAppElement('#root');
 
 const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false); // nuevo estado para ocultar el componente
+  const [submitted, setSubmitted] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({});
   const beepInterval = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -31,9 +36,23 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
     }
   };
 
+  const openModal = (title, text, type = 'info', onConfirm) => {
+    setModalContent({
+      title,
+      text,
+      type,
+      onConfirm
+    });
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   const handleSave = async () => {
     if (!file) {
-      mensajesSinRecargar("No se ha seleccionado un archivo", 'error', 'Error');
+      openModal('Error', 'No se ha seleccionado un archivo', 'error');
       return;
     }
 
@@ -43,30 +62,23 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
     );
 
     if (existingDocumentResponse && existingDocumentResponse.info === true) {
-      const confirmOverwrite = await swal({
-        title: "Documento ya existe",
-        text: `El documento "${file.name}" ya existe. ¿Quieres guardarlo con el mismo nombre?`,
-        icon: "warning",
-        buttons: {
-          cancel: "Cancelar",
-          confirm: {
-            text: "Guardar",
-            value: true,
-            visible: true,
-            className: "btn-danger",
-          },
-        },
-        dangerMode: true,
-      });
-
-      if (!confirmOverwrite) {
-        mensajesSinRecargar("Operación cancelada por el usuario.", 'info', 'Información');
-        return;
-      }
+      openModal(
+        'Documento ya existe',
+        `El documento "${file.name}" ya existe. ¿Quieres guardarlo con el mismo nombre?`,
+        'warning',
+        async () => {
+          await proceedWithUpload();
+        }
+      );
+      return;
     }
 
+    await proceedWithUpload();
+  };
+
+  const proceedWithUpload = async () => {
     setLoading(true);
-    setSubmitted(true); // Ocultar el área de carga
+    setSubmitted(true);
     playSound('/lecyov/audio/cargando.mp3');
 
     beepInterval.current = setInterval(() => {
@@ -83,7 +95,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       clearInterval(beepInterval.current);
 
       if (info.code !== 200) {
-        mensajesSinRecargar(info.msg, 'error', 'Error');
+        openModal('Error', info.msg, 'error');
         setLoading(false);
       } else {
         const nombreAudio = info.info.nombre;
@@ -93,13 +105,49 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       }
     } catch (error) {
       clearInterval(beepInterval.current);
-      mensajesSinRecargar("Error al guardar el documento", 'error', 'Error');
+      openModal('Error', 'Error al guardar el documento', 'error');
       setLoading(false);
     }
   };
 
   return (
     <section className="file-upload-card">
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="react-modal-content"
+        overlayClassName="react-modal-overlay"
+        contentLabel={modalContent.title}
+        ariaHideApp={false}
+        role="alertdialog"
+      >
+        <h2 className="modal-title">{modalContent.title}</h2>
+        <p className="modal-description">{modalContent.text}</p>
+        <div className="modal-button-container">
+          {modalContent.type === 'warning' && (
+            <button
+              onClick={closeModal}
+              className="modal-button modal-button-cancel"
+              aria-label="Cancelar operación"
+            >
+              Cancelar
+            </button>
+          )}
+          <button
+            onClick={() => {
+              if (modalContent.onConfirm) modalContent.onConfirm();
+              closeModal();
+            }}
+            className={`modal-button ${modalContent.type === 'warning' ? 'modal-button-confirm-warning' : 'modal-button-confirm'}`}
+            autoFocus
+            aria-label="Confirmar acción"
+          >
+            {modalContent.type === 'warning' ? 'Guardar' : 'Aceptar'}
+          </button>
+        </div>
+      </Modal>
+
+      {/* Resto del componente permanece igual */}
       {!loading ? (
         <>
           <h2 className='titulo-primario'>Carga tu documento PDF</h2>
@@ -163,9 +211,6 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       )}
     </section>
   );
-  
-  
-  
 };
 
 export default ExtractorUpload;

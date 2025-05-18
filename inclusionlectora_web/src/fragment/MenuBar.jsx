@@ -11,7 +11,7 @@ const MenuBar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [idRol, setIdRol] = useState('');
     const token = getToken();
-    const navigate = useNavigate();
+    const  navigate = useNavigate();
 
     useEffect(() => {
         const usuario = getUser();
@@ -30,12 +30,21 @@ const MenuBar = () => {
         <>
             {/* Primer renglón: logos y usuario */}
             <nav className="custom-navbar" role="navigation" aria-label="Barra superior">
-                <button className="menu-toggle" aria-label="Abrir menú" onClick={() => setMenuOpen(!menuOpen)} >☰</button>
+                <button
+                    className="menu-toggle"
+                    aria-label="Abrir menú"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-expanded={menuOpen}
+                >
+                    ☰
+                </button>
                 <div className="navbar-left">
                     <img
                         src={logoWhite}
                         alt="Logo de la Universidad Nacional de Loja"
                         className="logo-unl"
+                        onClick={() => navigate('/dashboard')}
+                        style={{ cursor: 'pointer' }}
                     />
                 </div>
                 {token && (
@@ -45,17 +54,30 @@ const MenuBar = () => {
                             id="dropdown-user"
                             className="user-avatar-btn"
                             aria-label="Opciones de usuario"
+                            aria-haspopup="true"
                         >
                             <img
                                 src={`${URLBASE}images/users/${fotoUsuario}`}
-                                alt="Foto de usuario"
+                                alt={`Foto de perfil de ${getUser()?.user?.nombre || 'usuario'}`}
                                 className="user-avatar"
                             />
                         </Dropdown.Toggle>
-                        <Dropdown.Menu align="end" role="menu">
-                            <Dropdown.Item href="/lecyov/perfil" role="menuitem">Perfil</Dropdown.Item>
+                        <Dropdown.Menu align="end" role="menu" aria-labelledby="dropdown-user">
+                            <Dropdown.Item
+                                as="button"
+                                onClick={() => navigate('/perfil')}
+                                role="menuitem"
+                            >
+                                Perfil
+                            </Dropdown.Item>
                             <Dropdown.Divider />
-                            <Dropdown.Item onClick={handleCerrarSesion} role="menuitem">Cerrar sesión</Dropdown.Item>
+                            <Dropdown.Item
+                                as="button"
+                                onClick={handleCerrarSesion}
+                                role="menuitem"
+                            >
+                                Cerrar sesión
+                            </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 )}
@@ -63,16 +85,46 @@ const MenuBar = () => {
 
             {/* Segundo renglón: botones de navegación */}
             {token && (
-                <nav className={`custom-navbar-secondary ${menuOpen ? 'open' : ''}`} role="navigation" aria-label="Menú de navegación principal">
+                <nav
+                    className={`custom-navbar-secondary ${menuOpen ? 'open' : ''}`}
+                    role="navigation"
+                    aria-label="Menú de navegación principal"
+                >
                     <div className="navbar-center">
                         {idRol === '1' && (
-                            <>
-                                <Button href="/lecyov/configuracion" className="nav-button" aria-label="Configuraciones del sistema">Configuraciones</Button>
-                           </>
+                            <Button
+                                as="button"
+                                onClick={() => navigate('/configuracion')}
+                                className="nav-button"
+                                aria-label="Configuraciones del sistema"
+                            >
+                                Configuraciones
+                            </Button>
                         )}
-                        <Button href="/lecyov/extraer/new" className="nav-button" aria-label="Extraer contenido de PDF">Extraer PDF</Button>
-                        <Button href="/lecyov/dashboard" className="nav-button" aria-label="Ver documentos procesados">Documentos</Button>
-                        <Button href="/lecyov/contactanos" className="nav-button" aria-label="Información y contacto">Información</Button>
+                        <Button
+                            as="button"
+                            onClick={() => navigate('/extraer/new')}
+                            className="nav-button"
+                            aria-label="Extraer contenido de PDF"
+                        >
+                            Extraer PDF
+                        </Button>
+                        <Button
+                            as="button"
+                            onClick={() => navigate('/dashboard')}
+                            className="nav-button"
+                            aria-label="Ver documentos procesados"
+                        >
+                            Documentos
+                        </Button>
+                        <Button
+                            as="button"
+                            onClick={() => navigate('/contactanos')}
+                            className="nav-button"
+                            aria-label="Información y contacto"
+                        >
+                            Información
+                        </Button>
                     </div>
                 </nav>
             )}
@@ -80,4 +132,4 @@ const MenuBar = () => {
     );
 };
 
-export default MenuBar;
+export default MenuBar; 
