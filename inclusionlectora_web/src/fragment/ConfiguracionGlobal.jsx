@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MenuBar from './MenuBar';
 import swal from 'sweetalert';
 import { peticionGet, peticionPost } from '../utilities/hooks/Conexion';
-import mensajes from '../utilities/Mensajes';
+import {mensajes}  from '../utilities/Mensajes';
 import { borrarSesion, getToken } from '../utilities/Sessionutil';
 import { useNavigate } from 'react-router-dom';
 

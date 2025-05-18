@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import mensajes from '../utilities/Mensajes';
+import {mensajesSinRecargar}  from '../utilities/Mensajes';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -43,7 +43,7 @@ const EditarPersona = ({ personaObtenida, handleChange }) => {
         ActualizarImagenes(formData, getToken(), "/modificar/entidad")
             .then((info) => {
                 if (!info || info.code !== 200) {
-                    mensajes(info?.msg || 'Error desconocido', 'error', 'Error');
+                    mensajesSinRecargar(info?.msg || 'Error desconocido', 'error', 'Error');
                     if (info?.msg === "TOKEN NO VALIDO O EXPIRADO") {
                         borrarSesion();
                     }
@@ -51,12 +51,12 @@ const EditarPersona = ({ personaObtenida, handleChange }) => {
                     setTimeout(() => {
                         window.location.reload();
                     }, 1200);
-                    mensajes(info.msg);
+                    mensajesSinRecargar(info.msg);
                 }
             })
             .catch(error => {
                 console.error('Error en la solicitud:', error);
-                mensajes('Error en la conexión con el servidor', 'error', 'Error');
+                mensajesSinRecargar('Error en la conexión con el servidor', 'error', 'Error');
             });
     };
 
@@ -76,7 +76,7 @@ const EditarPersona = ({ personaObtenida, handleChange }) => {
             dangerMode: true,
         }).then((willCancel) => {
             if (willCancel) {
-                mensajes("Actualización cancelada", "info", "Información");
+                mensajesSinRecargar("Actualización cancelada", "info", "Información");
                 setTimeout(() => {
                     window.location.reload();
                 }, 1200);

@@ -4,7 +4,7 @@ import '../css/Registro_Style.css';
 import '../css/style.css';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
-import mensajes from '../utilities/Mensajes';
+import {mensajesSinRecargar} from '../utilities/Mensajes';
 import { peticionPut } from '../utilities/hooks/Conexion';
 import { borrarSesion, getToken, getUser } from '../utilities/Sessionutil';
 
@@ -36,13 +36,13 @@ const CambioClave = () => {
 
         const response = await peticionPut(( token && external_id)?token:getToken(), endpoint, datos);
         if (response.code === 200) {
-            mensajes("La contraseña ha sido actualizada exitosamente", 'success', 'Éxito');
+            mensajesSinRecargar("La contraseña ha sido actualizada exitosamente", 'success', 'Éxito');
             setTimeout(() => {
                 navigate('/login');
                 borrarSesion();
             }, 1200);
         } else {
-            mensajes(response.msg, 'error');
+            mensajesSinRecargar(response.msg, 'error');
         }
     };
 

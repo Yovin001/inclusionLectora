@@ -4,8 +4,8 @@ import '../css/Login_Style.css';
 import { InicioSesion } from '../utilities/hooks/Conexion';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { getToken, saveCorreo, saveRolApi, saveToken, saveUser } from '../utilities/Sessionutil';
-import mensajes from '../utilities/Mensajes';
+import { saveCorreo, saveRolApi, saveToken, saveUser } from '../utilities/Sessionutil';
+import {mensajesSinRecargar}  from '../utilities/Mensajes';
 import logoUNL from '../img/Logo_UNL.png';
 import logoCarrera from '../img/LogoCarrera.png';
 import { Button } from 'react-bootstrap';
@@ -32,21 +32,21 @@ const Login = () => {
 
         InicioSesion(datos).then((info) => {
             if (info.code !== 200) {
-                mensajes(info.msg, "error", "Error");
+                mensajesSinRecargar(info.msg, "error", "Error");
             } else {
                 const infoAux = info.info;
                 saveToken(infoAux.token);
                 saveUser(infoAux.user);
                 saveCorreo(infoAux.user.correo);
                 saveRolApi(infoAux.user.rol);
-                mensajes(info.msg);
+                mensajesSinRecargar(info.msg);
                 navigate("/dashboard");
             }
         });
     };
 
     return (
-        <main className="d-flex justify-content-center align-items-center vh-100 bg-light" role="main">
+        <div className="d-flex justify-content-center align-items-center vh-100 bg-light" role="div">
             <section className="p-5 rounded shadow login-form text-center" aria-labelledby="login-title">
                 <header>
                     <figure className="d-flex justify-content-center align-items-center gap-3 mb-4">
@@ -150,7 +150,7 @@ const Login = () => {
                     </nav>
                 </form>
             </section>
-        </main>
+        </div>
     );
 };
 

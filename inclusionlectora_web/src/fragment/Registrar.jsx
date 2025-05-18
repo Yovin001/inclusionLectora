@@ -7,7 +7,7 @@ import { GuardarArchivos } from '../utilities/hooks/Conexion';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { borrarSesion, getToken } from '../utilities/Sessionutil';
-import mensajes from '../utilities/Mensajes';
+import {mensajesSinRecargar}  from '../utilities/Mensajes';
 import swal from 'sweetalert';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,7 +30,7 @@ const Registrar = () => {
 
     const onSubmit = data => {
         if (!passwordMatch) {
-            mensajes('Las contraseñas no coinciden', 'error', 'Error');
+            mensajesSinRecargar('Las contraseñas no coinciden', 'error', 'Error');
             return;
         }
         const formData = new FormData();
@@ -49,10 +49,10 @@ const Registrar = () => {
 
         GuardarArchivos(formData, getToken(), "/entidad/guardar").then(info => {
             if (info.code !== 200) {
-                mensajes(info.msg, 'error', 'Error');
+                mensajesSinRecargar(info.msg, 'error', 'Error');
                 borrarSesion();
             } else {
-                mensajes(info.msg);
+                mensajesSinRecargar(info.msg);
                 navigate('/login');
             }
         });
@@ -81,7 +81,7 @@ const Registrar = () => {
             dangerMode: true,
         }).then((willCancel) => {
             if (willCancel) {
-                mensajes("Registro cancelado", "info", "Información");
+                mensajesSinRecargar("Registro cancelado", "info", "Información");
                 setTimeout(() => {
                     window.location.reload();
                 }, 1200);

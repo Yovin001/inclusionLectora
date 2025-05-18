@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { peticionGet, peticionDelete } from '../utilities/hooks/Conexion';
 import { borrarSesion, getToken, getUser } from '../utilities/Sessionutil';
-import mensajes from '../utilities/Mensajes';
+import {mensajesSinRecargar}  from '../utilities/Mensajes';
 import MenuBar from './MenuBar';
 import { useNavigate } from 'react-router-dom';
 import '../css/style.css';
@@ -33,7 +33,7 @@ const Dashboard = () => {
             })
             .catch((error) => {
                 console.error('Error al cargar documentos:', error);
-                mensajes('Error al cargar documentos', 'error', 'Error');
+                mensajesSinRecargar('Error al cargar documentos', 'error', 'Error');
             })
             .finally(() => {
                 setLoading(false);
@@ -44,15 +44,15 @@ const Dashboard = () => {
         peticionDelete(getToken(), `documento/${docId}`)
             .then((info) => {
                 if (info.code === 200) {
-                    mensajes('Documento eliminado con éxito', 'success', 'Éxito');
+                    mensajesSinRecargar('Documento eliminado con éxito', 'success', 'Éxito');
                     setDocumentos((prevDocs) => prevDocs.filter((doc) => doc.external_id !== docId));
                 } else {
-                    mensajes('Error al eliminar el documento', 'error', 'Error');
+                    mensajesSinRecargar('Error al eliminar el documento', 'error', 'Error');
                 }
             })
             .catch((error) => {
                 console.error('Error al eliminar el documento:', error);
-                mensajes('Error al eliminar el documento', 'error', 'Error');
+                mensajesSinRecargar('Error al eliminar el documento', 'error', 'Error');
             });
     };
 
@@ -78,7 +78,7 @@ const Dashboard = () => {
                 <MenuBar />
             </header>
 
-            <main className='contenedor-centro'>
+            <div className='contenedor-centro'>
                 <section className='contenedor-carta'>
                     <div className='contenedor-filo'>
                         <Button className='btn-normal' onClick={handleShowUploadModal}>
@@ -116,7 +116,7 @@ const Dashboard = () => {
                         )}
                     </section>
                 </section>
-            </main>
+            </div>
         </>
     );
 };

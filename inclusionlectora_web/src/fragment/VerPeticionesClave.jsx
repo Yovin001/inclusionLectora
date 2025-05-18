@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { getToken, getUser } from '../utilities/Sessionutil';
 import { peticionGet } from '../utilities/hooks/Conexion';
-import mensajes from '../utilities/Mensajes';
+import {mensajesSinRecargar}  from '../utilities/Mensajes';
 import swal from 'sweetalert';
 import MenuBar from './MenuBar';
 
@@ -14,7 +14,7 @@ const VerPeticionesClave = () => {
         if (!bucle) {
             peticionGet(getToken(), "peticion/CC").then((info) => {
                 if (info.code !== 200 && (info.msg === "No existe token" || info.msg === "Token no valido")) {
-                    mensajes(info.msg);
+                    mensajesSinRecargar(info.msg);
                 } else {
                     setBucle(true);
                     setPeticiones(info.info);
@@ -41,16 +41,16 @@ const VerPeticionesClave = () => {
                 if (willGenerate) {
                     peticionGet(getToken(), `aceptarechazar/peticiones/${external_id}/1/1/${getUser().user.id}`).then((info) => {
                         if (info.code !== 200) {
-                            mensajes(info.msg);
+                            mensajesSinRecargar(info.msg);
                         } else {
                             const external_id_cuenta = info.info;
                             peticionGet(getToken(), `cuenta/token/${external_id_cuenta}`).then((info) => {
                                 if (info.code !== 200 && (info.msg === "No existe token" || info.msg === "Token no valido")) {
-                                    mensajes(info.msg);
+                                    mensajesSinRecargar(info.msg);
                                 } else {
                                     const token = info.info.token;
                                     setLink(`${window.location.origin}/cambio/clave/restablecer/${external_id_cuenta}/${token}`);
-                                    mensajes("Enlace generado con éxito", "success", "Éxito");
+                                    mensajesSinRecargar("Enlace generado con éxito", "success", "Éxito");
                                 }
                             });
                         }
@@ -63,7 +63,7 @@ const VerPeticionesClave = () => {
         const handleCopiarLink = () => {
             if (link) {
                 navigator.clipboard.writeText(link).then(() => {
-                    mensajes("Enlace copiado al portapapeles", "success", "Copiado");
+                    mensajesSinRecargar("Enlace copiado al portapapeles", "success", "Copiado");
                 });
             }
         };

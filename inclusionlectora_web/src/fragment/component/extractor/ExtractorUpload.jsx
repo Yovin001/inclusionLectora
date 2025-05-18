@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { GuardarArchivos, peticionGet, URLBASE } from '../../../utilities/hooks/Conexion';
 import { getToken, getUser } from '../../../utilities/Sessionutil';
-import mensajes from '../../../utilities/Mensajes';
+import {mensajesSinRecargar} from '../../../utilities/Mensajes';
 import swal from 'sweetalert';
 import '../../../css/Extractor_Style.css';
 import { Button } from 'react-bootstrap';
@@ -33,7 +33,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
 
   const handleSave = async () => {
     if (!file) {
-      mensajes("No se ha seleccionado un archivo", 'error', 'Error');
+      mensajesSinRecargar("No se ha seleccionado un archivo", 'error', 'Error');
       return;
     }
 
@@ -60,7 +60,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       });
 
       if (!confirmOverwrite) {
-        mensajes("Operación cancelada por el usuario.", 'info', 'Información');
+        mensajesSinRecargar("Operación cancelada por el usuario.", 'info', 'Información');
         return;
       }
     }
@@ -83,7 +83,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       clearInterval(beepInterval.current);
 
       if (info.code !== 200) {
-        mensajes(info.msg, 'error', 'Error');
+        mensajesSinRecargar(info.msg, 'error', 'Error');
         setLoading(false);
       } else {
         const nombreAudio = info.info.nombre;
@@ -93,7 +93,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       }
     } catch (error) {
       clearInterval(beepInterval.current);
-      mensajes("Error al guardar el documento", 'error', 'Error');
+      mensajesSinRecargar("Error al guardar el documento", 'error', 'Error');
       setLoading(false);
     }
   };

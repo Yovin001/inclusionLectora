@@ -6,7 +6,7 @@ import AudioPlayer from './component/extractor/AudioPlayer';
 import ExtrasControls from './component/extractor/ExtrasControls';
 import { URLBASE, peticionGet } from '../utilities/hooks/Conexion';
 import { getToken } from '../utilities/Sessionutil';
-import mensajes from '../utilities/Mensajes';
+import {mensajesSinRecargar}  from '../utilities/Mensajes';
 import '../css/Extractor_Style.css';
 
 const Extractor = () => {
@@ -28,12 +28,12 @@ const Extractor = () => {
           if (info.code === 200) {
             setAudioName(info.info.nombre);
           } else {
-            mensajes("No se encontró el documento", 'error', 'Error');
+            mensajesSinRecargar("No se encontró el documento", 'error', 'Error');
             navigate('/dashboard');
           }
         })
         .catch(() => {
-          mensajes("Error al buscar el documento", 'error', 'Error');
+          mensajesSinRecargar("Error al buscar el documento", 'error', 'Error');
           navigate('/dashboard');
         });
     }
@@ -42,7 +42,7 @@ const Extractor = () => {
   return (
     <>
       <MenuBar />
-      <main className="extractor-container" role="main" aria-labelledby="page-title">
+      <div className="extractor-container"  aria-labelledby="page-title">
         <h1 id="page-title" className="visually-hidden">Extractor de Audios y Documentos</h1>
 
         {(!audioComplete && (!external_id || external_id === "new")) ? (
@@ -84,7 +84,7 @@ const Extractor = () => {
             )}
           </>
         )}
-      </main>
+      </div>
     </>
   );
 };

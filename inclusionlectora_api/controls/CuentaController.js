@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 var models = require('../models')
 var cuenta = models.cuenta;
+const uuid = require('uuid');
 
 const { validationResult } = require('express-validator');
 
@@ -15,11 +16,11 @@ const { Op } = require('sequelize');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.GMAIL, 
-      pass: process.env.GMAIL_PASSWORD
+        user: process.env.GMAIL,
+        pass: process.env.GMAIL_PASSWORD
     }
-  });
-  
+});
+
 
 const esClaveValida = function (clave, claveUser) {
     return bcrypt.compareSync(claveUser, clave);
@@ -194,6 +195,7 @@ class CuentaController {
             if (esClaveValida(cuenta.clave, req.body.clave_vieja)) {
                 const claveHash_nueva = bcrypt.hashSync(req.body.clave_nueva, salt);
                 cuenta.clave = claveHash_nueva;
+                cuenta.external_id=uuid.v4();
                 const cuantaActualizada = await cuenta.save();
                 if (!cuantaActualizada) {
                     return res.status(400).json({ msg: "NO SE HAN MODIFICADO SUS DATOS, VUELVA A INTENTAR", code: 400 });
@@ -237,8 +239,8 @@ class CuentaController {
 
             const salt = bcrypt.genSaltSync(saltRounds);
             const claveHash_nueva = bcrypt.hashSync(req.body.clave_nueva, salt);
-            console.log('CLaves');
             cuenta.clave = claveHash_nueva;
+            cuenta.external_id=uuid.v4();
             const cuentaActualizada = await cuenta.save();
 
             if (!cuentaActualizada) {
@@ -262,7 +264,7 @@ class CuentaController {
         }
     }
 
-    async  solicitudCambioClaveAutomatica(req, res) {
+    async solicitudCambioClaveAutomatica(req, res) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -272,24 +274,24 @@ class CuentaController {
                     errors: errors.array()
                 });
             }
-    
+
             const cuenta = await models.cuenta.findOne({
                 where: { correo: req.body.correo, estado: "ACEPTADO" }, include: [
-                                    {
-                                        model: models.entidad,
-                                        as: 'entidad',
-                                        attributes: ['nombres', 'apellidos'],
-                                    },
-                                ],
+                    {
+                        model: models.entidad,
+                        as: 'entidad',
+                        attributes: ['nombres', 'apellidos'],
+                    },
+                ],
             });
-    
+
             if (!cuenta) {
                 return res.status(200).json({
                     code: 200,
                     msg: "Cuenta no encontrada o no aceptada"
                 });
             }
-    
+
             // Genera el token
             const tokenData = {
                 external: cuenta.external_id,
@@ -297,11 +299,11 @@ class CuentaController {
                 check: true
             };
             const token = jwt.sign(tokenData, process.env.KEY, { expiresIn: '10m' });
-    
+
             // Construye el enlace de restablecimiento
             const enlace = `${process.env.URL_APP}cambio/clave/restablecer/${cuenta.external_id}/${token}`;
-            const nombreUsuario = cuenta.entidad.nombres+ " "+cuenta.entidad.apellidos || 'usuario';
-    
+            const nombreUsuario = cuenta.entidad.nombres + " " + cuenta.entidad.apellidos || 'usuario';
+
             // Envía el correo
             const mailOptions = {
                 from: `"Inclusión Lectora" <${process.env.EMAIL_USER}>`,
@@ -316,14 +318,14 @@ class CuentaController {
                     <p>Si no realizaste esta solicitud, ignora este mensaje.</p>
                 `
             };
-    
+
             await transporter.sendMail(mailOptions);
-    
+
             return res.status(200).json({
                 code: 200,
                 msg: "Correo enviado con el enlace de restablecimiento"
             });
-    
+
         } catch (error) {
             console.error("Error en solicitud de cambio de clave:", error);
             return res.status(500).json({
