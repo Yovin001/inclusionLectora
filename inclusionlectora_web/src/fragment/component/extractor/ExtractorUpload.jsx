@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import '../../../css/Extractor_Style.css';
 import '../../../css/ExtractorModal_Style.css'; // Nuevo archivo CSS para el modal
 import { Button } from 'react-bootstrap';
+import { mensajesSinRecargar } from '../../../utilities/Mensajes';
 
 Modal.setAppElement('#root');
 
@@ -51,7 +52,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
 
   const handleSave = async () => {
     if (!file) {
-      openModal('Error', 'No se ha seleccionado un archivo', 'error');
+      mensajesSinRecargar('No se ha seleccionado un archivo', 'error', 'Error');
       return;
     }
 
@@ -90,23 +91,36 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
     formData.append('id', getUser().user.id);
 
     try {
-      const info = await GuardarArchivos(formData, getToken(), "/documento");
-      clearInterval(beepInterval.current);
-
-      if (info.code !== 200) {
-        openModal('Error', info.msg, 'error');
-        setLoading(false);
-      } else {
-        const nombreAudio = info.info.nombre;
-        setAudioComplete(`${URLBASE}audio/completo/${nombreAudio}.mp3`);
-        setLoading(false);
-        navegation(`/extraer/${info.info}`);
-      }
+      GuardarArchivos(formData, getToken(), "/documento")
+        .then((info) => {
+          if (info.code === 200) {
+            const nombreAudio = info.info.nombre;
+            setAudioComplete(`${URLBASE}audio/completo/${nombreAudio}.mp3`);
+            setLoading(false);
+            clearInterval(beepInterval.current);
+            navegation(`/extraer/${info.info}`);
+          } else {
+          mensajesSinRecargar(info.msg || 'Error inesperado', 'error', 'Error');
+            setLoading(false);
+            clearInterval(beepInterval.current);
+          }
+        })
+        .catch((error) => {
+          clearInterval(beepInterval.current);
+          setLoading(false);
+         // Verifica si el error es por tamaño
+          if (error.response && error.response.status === 413) {
+            mensajesSinRecargar('El archivo es demasiado grande. Tamaño máximo permitido: 5 MB.', 'error', 'Error');
+          } else {
+          mensajesSinRecargar('Error al guardar el documento', 'error', 'Error');
+          }
+        });
     } catch (error) {
       clearInterval(beepInterval.current);
-      openModal('Error', 'Error al guardar el documento', 'error');
       setLoading(false);
+      mensajesSinRecargar('Error al guardar el documento', 'error', 'Error');
     }
+    
   };
 
   return (
@@ -150,7 +164,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
       {!loading ? (
         <>
           <h2 className='titulo-primario'>Carga tu documento PDF</h2>
-  
+
           <label
             htmlFor="uploadFile1"
             className="file-upload-label"
@@ -172,7 +186,7 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
               <path d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z" />
             </svg>
             Subir archivo
-  
+
             <input
               type="file"
               id="uploadFile1"
@@ -184,14 +198,14 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
               aria-label="Seleccionar archivo PDF"
             />
           </label>
-  
+
           <p aria-live="polite">
             {file
               ? <>📄 <strong>Archivo seleccionado:</strong> {file.name}</>
               : <strong>No se ha seleccionado un archivo</strong>
             }
           </p>
-  
+
           <Button
             className='verde'
             onClick={handleSave}

@@ -1,0 +1,157 @@
+/* === Estilos para Configuración Global === */
+.config-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-family: 'Arial', sans-serif;
+}
+
+.config-hidden-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* === Tarjetas de configuración === */
+.config-card {
+    background-color: #f6f6f6;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.config-card h2 {
+    color: #000;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* === Controles de formulario === */
+.config-form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.config-form-control {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    text-align: center;
+}
+
+.config-form-control:focus {
+    outline: 2px solid var(--azul-intermedio);
+}
+
+.config-text-muted {
+    display: block;
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* === Controles de botones === */
+.config-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+/* === Botones === */
+.btn-config-verde {
+    background-color: var(--verde-claro);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-config-verde:hover {
+    background-color: var(--verde-pastel);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-config-verde:focus {
+    outline: 2px solid var(--verde-pastel);
+}
+
+.btn-config-azul {
+    background-color: var(--azul-intermedio);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-config-azul:hover {
+    background-color: var(--azul-oscuro);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-config-azul:focus {
+    outline: 2px solid var(--azul-oscuro);
+}
+
+/* === Mensajes de advertencia === */
+.config-warning-box {
+    background-color: #ffe5e5;
+    color: #cc0000;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-left: 4px solid #cc0000;
+}
+
+/* === Estilos para etiquetas === */
+.config-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-align: center;
+    color: var(--azul-oscuro);
+}
+
+.config-current-value {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    color: var(--azul-intermedio);
+    margin: 1rem 0;
+}
+
+/* Mejoras de accesibilidad */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

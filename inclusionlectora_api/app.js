@@ -45,6 +45,20 @@ app.use('/api', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({
+      msg: `Archivo demasiado grande. Límite permitido: ${maxFileSize / (1024 * 1024)} MB.`,
+      code: 413,
+    });
+  }
+
+  return res.status(500).json({
+    msg: 'Error interno del servidor',
+    code: 500,
+  });
+});
+
 
 // Manejador de errores
 app.use(function(err, req, res, next) {
