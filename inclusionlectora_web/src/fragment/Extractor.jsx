@@ -6,7 +6,7 @@ import AudioPlayer from './component/extractor/AudioPlayer';
 import ExtrasControls from './component/extractor/ExtrasControls';
 import { URLBASE, peticionGet } from '../utilities/hooks/Conexion';
 import { getToken } from '../utilities/Sessionutil';
-import {mensajesSinRecargar}  from '../utilities/Mensajes';
+import { mensajesSinRecargar } from '../utilities/Mensajes';
 import '../css/Extractor_Style.css';
 
 const Extractor = () => {
@@ -41,26 +41,26 @@ const Extractor = () => {
 
   return (
     <>
-                 <header>
-                <MenuBar />
-            </header>
-      <main className="extractor-container"  aria-labelledby="page-title">
+      <header>
+        <MenuBar />
+      </header>
+      <main className="extractor-container" aria-labelledby="page-title">
         <h1 id="page-title" className="visually-hidden">Extractor de Audios y Documentos</h1>
 
         {(!audioComplete && (!external_id || external_id === "new")) ? (
           <section aria-label="Subida de archivo de audio o documento">
-            <ExtractorUpload 
-              setFileURL={setFileURL} 
-              setAudioComplete={setAudioComplete} 
-              navegation={navigate} 
+            <ExtractorUpload
+              setFileURL={setFileURL}
+              setAudioComplete={setAudioComplete}
+              navegation={navigate}
             />
           </section>
         ) : (
           <>
             <section aria-label="Reproductor de Audio">
-              <AudioPlayer 
-                audioComplete={audioComplete} 
-                audioName={audioName} 
+              <AudioPlayer
+                audioComplete={audioComplete}
+                audioName={audioName}
                 external_id={external_id}
               />
             </section>
@@ -79,7 +79,7 @@ const Extractor = () => {
               <section aria-label="Visualización del Documento PDF">
                 <iframe src={fileURL} title={`Documento PDF: ${audioName || 'sin título'}`}>
                   {/* Mensaje alternativo para navegadores que no soportan iframe */}
-                  Este navegador no soporta la vista previa de documentos. Puedes descargar el PDF aquí: 
+                  Este navegador no soporta la vista previa de documentos. Puedes descargar el PDF aquí:
                   <a href={fileURL} download>Descargar PDF</a>.
                 </iframe>
               </section>

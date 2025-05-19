@@ -11,7 +11,7 @@ const MenuBar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [idRol, setIdRol] = useState('');
     const token = getToken();
-    const  navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const usuario = getUser();
@@ -103,12 +103,16 @@ const MenuBar = () => {
                         )}
                         <Button
                             as="button"
-                            onClick={() => navigate('/extraer/new')}
+                            onClick={() => {
+                                navigate('/reload-helper'); // ruta temporal para desmontar
+                                setTimeout(() => navigate('/extraer/new'), 0); // redirige de inmediato
+                            }}
                             className="nav-button"
                             aria-label="Extraer contenido de PDF"
                         >
                             Extraer PDF
                         </Button>
+
                         <Button
                             as="button"
                             onClick={() => navigate('/dashboard')}

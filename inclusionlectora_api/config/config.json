@@ -3,7 +3,7 @@
         "username":"desarrollo",
         "password":"desarrollo",
         "database": "inclusionlectora_db",
-        "host":"db",
+        "host":"localhost",
         "dialect":"mysql",
         "operatorAliases":false
     }

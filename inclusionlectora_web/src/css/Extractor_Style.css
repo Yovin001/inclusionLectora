@@ -24,10 +24,10 @@
   
   /* === AudioPlayer exclusivo para extractor === */
   .extractor-audio-card {
-    background-color: #f6f6f6;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 16px;
   }
   
   .extractor-audio-card h2 {

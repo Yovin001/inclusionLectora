@@ -19,11 +19,11 @@
 
 /* === Tarjetas de configuración === */
 .config-card {
-    background-color: #f6f6f6;
     border-radius: 12px;
     padding: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     margin-bottom: 2rem;
+    border: 1px solid #ccc;
 }
 
 .config-card h2 {

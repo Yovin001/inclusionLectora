@@ -151,7 +151,7 @@ const Registrar = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="nombres" className="form-label">Nombres *</label>
+                                <label htmlFor="nombres" className="form-label">Nombres*</label>
                                 <input
                                     id="nombres"
                                     type="text"
@@ -175,7 +175,7 @@ const Registrar = () => {
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="apellidos" className="form-label">Apellidos *</label>
+                                <label htmlFor="apellidos" className="form-label">Apellidos*</label>
                                 <input
                                     id="apellidos"
                                     type="text"
@@ -201,7 +201,7 @@ const Registrar = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="fecha_nacimiento" className="form-label">Fecha de Nacimiento *</label>
+                                <label htmlFor="fecha_nacimiento" className="form-label">Fecha de Nacimiento*</label>
                                 <input
                                     id="fecha_nacimiento"
                                     type="date"
@@ -227,7 +227,7 @@ const Registrar = () => {
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="telefono" className="form-label">Teléfono *</label>
+                                <label htmlFor="telefono" className="form-label">Teléfono*</label>
                                 <input
                                     id="telefono"
                                     type="text"
@@ -261,7 +261,7 @@ const Registrar = () => {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="correo" className="form-label">Correo Electrónico *</label>
+                            <label htmlFor="correo" className="form-label">Correo Electrónico*</label>
                             <input
                                 id="correo"
                                 type="email"
@@ -287,7 +287,7 @@ const Registrar = () => {
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="clave" className="form-label">Contraseña *</label>
+                                <label htmlFor="clave" className="form-label">Contraseña*</label>
                                 <div className="input-group">
                                     <input
                                         id="clave"
@@ -337,7 +337,7 @@ const Registrar = () => {
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="confirmPassword" className="form-label">Confirmar Contraseña *</label>
+                                <label htmlFor="confirmPassword" className="form-label">Confirmar Contraseña*</label>
                                 <div className="input-group">
                                     <input
                                         id="confirmPassword"
