@@ -78,7 +78,7 @@ const Dashboard = () => {
                 <MenuBar />
             </header>
 
-            <div className='contenedor-centro'>
+            <main className='contenedor-centro'>
                 <section className='contenedor-carta'>
                     <div className='contenedor-filo'>
                         <Button className='btn-normal' onClick={handleShowUploadModal}>
@@ -86,7 +86,7 @@ const Dashboard = () => {
                         </Button>
                        
                     </div>
-                    <p className='titulo-primario m-0'>Lista de Documentos</p>
+                    <p className='titulo-primario'>Lista de Documentos</p>
                     <InputGroup className='mb-3'>
                         <InputGroup.Text>
                             <FontAwesomeIcon icon={faSearch} aria-label="Buscar" />
@@ -116,7 +116,7 @@ const Dashboard = () => {
                         )}
                     </section>
                 </section>
-            </div>
+            </main>
         </>
     );
 };

@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { GuardarArchivos, peticionGet, URLBASE } from '../../../utilities/hooks/Conexion';
 import { getToken, getUser } from '../../../utilities/Sessionutil';
-import { mensajesSinRecargar } from '../../../utilities/Mensajes';
 import Modal from 'react-modal';
 import '../../../css/Extractor_Style.css';
 import '../../../css/ExtractorModal_Style.css'; // Nuevo archivo CSS para el modal

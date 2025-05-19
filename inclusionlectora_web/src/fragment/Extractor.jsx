@@ -41,8 +41,10 @@ const Extractor = () => {
 
   return (
     <>
-      <MenuBar />
-      <div className="extractor-container"  aria-labelledby="page-title">
+                 <header>
+                <MenuBar />
+            </header>
+      <main className="extractor-container"  aria-labelledby="page-title">
         <h1 id="page-title" className="visually-hidden">Extractor de Audios y Documentos</h1>
 
         {(!audioComplete && (!external_id || external_id === "new")) ? (
@@ -84,7 +86,7 @@ const Extractor = () => {
             )}
           </>
         )}
-      </div>
+      </main>
     </>
   );
 };

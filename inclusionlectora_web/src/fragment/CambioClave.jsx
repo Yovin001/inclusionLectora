@@ -52,8 +52,8 @@ const CambioClave = () => {
             <section className="p-5 rounded shadow login-form text-center">
                 <header>
                     <figure className="d-flex justify-content-center align-items-center gap-3 mb-4">
-                        <img src={logoUNL} alt="Logo UNL" style={{ height: '60px' }} />
-                        <img src={logoCarrera} alt="Logo Carrera" style={{ height: '60px' }} />
+                        <img src={logoUNL} alt="Logo de la Universidad Nacional de Loja" style={{ height: '60px' }} />
+                        <img src={logoCarrera} alt="Logo de la Carrera de Computación" style={{ height: '60px' }} />
                     </figure>
                     <h1 className="mb-4" style={{ fontWeight: 'bold', color: '#424874' }}>
                         Cambio de Contraseña

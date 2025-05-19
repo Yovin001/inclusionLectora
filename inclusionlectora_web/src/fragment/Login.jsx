@@ -68,7 +68,7 @@ const Login = () => {
                         />
                         <img 
                             src={logoCarrera} 
-                            alt="Logo de la carrera universitaria" 
+                            alt="Logo de la carrera de Computación" 
                             style={{ height: '60px' }} 
                             aria-hidden="true"
                         />
