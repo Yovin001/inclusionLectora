@@ -1,102 +1,111 @@
-/* Sobre_nOSOTROS.css */
+/* Sobre_Nosotros.css */
 
-/* General */
-body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f5f5f5;
-  }
-  
-  h1, h2 {
-    margin: 0;
-  }
-  
-  /* Header */
- 
-  
-  /* Main Content */
-  .sobre-nosotros {
-    padding: 2rem 1rem;
-  }
-  
-  /* Hero Section */
-  .hero {
-    text-align: center;
-    padding: 3rem 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .hero-content .titulo-principal {
-    font-size: 2.5rem;
-    font-weight: bold;
-color: #529914;
-  }
-  
-  .hero-content .descripcion {
-    font-size: 1.2rem;
-    margin-top: 1rem;
-    line-height: 1.8;
-  }
-  
-  /* Section General */
-  section {
-    margin-bottom: 2rem;
-  }
-  
-  .contenedor {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Titles */
-  .titulo-secundario {
-    font-size: 1.8rem;
-    color: #A6B1E1;
-    margin-bottom: 1rem;
-  }
-  
-  /* Text */
-  .texto-normal {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: #555;
-    line-height: 1.8;
-  }
-  
-  /* List Style */
-  .lista-detallada {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .lista-detallada li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .lista-detallada a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .lista-detallada a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 1rem 0;
-    color: #fff;
-    margin-top: 2rem;
-  }
-  
-  .footer p {
-    margin: 0;
-  }
-  
+/* Estilos generales */
+.sobre-nosotros {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f6f8;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hero section (header) */
+.hero {
+  background-color: var(--azul-oscuro);
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.titulo-principal {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.descripcion {
+  margin: 0.5rem 0 0;
+}
+
+/* Contenido principal */
+.main-content {
+  flex: 1;
+  width: 100%;
+}
+
+/* Secciones de contenido */
+.info, .equipo {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+
+.contenedor {
+  width: 100%;
+}
+
+.titulo-secundario {
+  color: var(--azul-oscuro);
+  font-size: 1.5rem;
+  margin-top: 0;
+}
+
+.texto-normal {
+  margin: 0.5rem 0;
+}
+
+.texto-blanco {
+  margin: 0.5rem 0;
+  color: white;
+}
+
+/* Lista del equipo */
+.lista-detallada {
+  list-style-type: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.lista-detallada li {
+  margin: 0.5rem 0;
+}
+
+/* Footer */
+.footer {
+  background-color: var(--azul-oscuro);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.footer .contenedor {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Enlaces */
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus, button:focus {
+  outline: 3px solid #ffbf47;
+}

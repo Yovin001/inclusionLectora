@@ -6,9 +6,9 @@ import MenuBar from './MenuBar';
 const SobreNosotros = () => {
   return (
     <>
-
+      <header>
         <MenuBar />
-
+      </header>
       <main className="sobre-nosotros">
         <section className="hero">
           <div className="hero-content">
@@ -19,7 +19,8 @@ const SobreNosotros = () => {
           </div>
         </section>
 
-        <section className="info">
+        <div className="main-content">
+        <section className=" info">
           <div className="contenedor">
             <h2 className="titulo-secundario">¿Qué es Inclusión Lectora?</h2>
             <p className="texto-normal">
@@ -35,18 +36,19 @@ const SobreNosotros = () => {
               <li><strong>Desarrollador:</strong> Yovin Stiven Urrego Gómez - <a href="mailto:yovin.urrego@unl.edu.ec">yovin.urrego@unl.edu.ec</a></li>
               <li><strong>Docente Involucrado:</strong> Oscar Miguel Cumbicus Pineda - <a href="mailto:oscar.cumbicus@unl.edu.ec">oscar.cumbicus@unl.edu.ec</a></li>
               <li><strong>Docente Involucrado:</strong> Pablo Fernando Ordoñez Ordoñez - <a href="mailto:fjalvarez@unl.edu.ec">pfordonez@unl.edu.ec</a></li>
-             <li><strong>Docente Involucrado:</strong> Hernán Leonardo Torres Carrión - <a href="mailto:fjalvarez@unl.edu.ec">hltorres@unl.edu.ec</a></li>
+              <li><strong>Docente Involucrado:</strong> Hernán Leonardo Torres Carrión - <a href="mailto:fjalvarez@unl.edu.ec">hltorres@unl.edu.ec</a></li>
               <li><strong>Docente Involucrado:</strong> Francisco Javier Alvarez Pineda - <a href="mailto:fjalvarez@unl.edu.ec">fjalvarez@unl.edu.ec</a></li>
             </ul>
           </div>
         </section>
-
+        </div>
+        </main>
         <footer className="footer">
           <div className="contenedor">
-            <p className="texto-normal">© {new Date().getFullYear()} Inclusión Lectora. Todos los derechos reservados.</p>
+            <p className="descripcion">© {new Date().getFullYear()} Inclusión Lectora. Todos los derechos reservados.</p>
           </div>
         </footer>
-      </main>
+     
     </>
   );
 };
