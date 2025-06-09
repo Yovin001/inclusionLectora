@@ -146,7 +146,7 @@ const uploadDocumento = (req, res, next) => {
 
 
 //Global configs
-router.get('/config/tamano/:zize',  auth({ checkAdmin: true }),(req, res) => {
+router.get('/config/tamano/:zize',(req, res) => {
   const size = parseInt(req.params.zize);
 
   if (!size || isNaN(size) || size <= 0) {
@@ -162,13 +162,13 @@ router.get('/config/tamano/:zize',  auth({ checkAdmin: true }),(req, res) => {
     code: 200, info: size,
   });
 });
-router.get('/config/tamano',  auth({ checkAdmin: true }),(req, res) => {
+router.get('/config/tamano',(req, res) => {
   res.status(200).json({code: 200,
     info: maxFileSize / (1024 * 1024),
   });
 });
 
-router.post(  '/documentos/eliminar/todos',  auth({ checkAdmin: true }), [
+router.post(  '/documentos/eliminar/todos', [
   body('key','Ingrese una clave valida').exists().not().isEmpty() ],  documentoController.eliminarTodos);
 
 
@@ -179,10 +179,10 @@ router.post('/sesion', [
 ], cuentaController.sesion)
 
 //GET-ROL
-router.get('/rol/listar',  auth({ checkAdmin: true }), rolController.listar);
+router.get('/rol/listar', rolController.listar);
 
 //POST ROL
-router.post('/rol/guardar',  auth({ checkAdmin: true }), rolController.guardar);
+router.post('/rol/guardar', rolController.guardar);
 
 /*****ENTIDAD****/
 router.post('/entidad/guardar', (req, res, next) => {
@@ -203,7 +203,7 @@ router.post('/entidad/guardar', (req, res, next) => {
   });
 });
 
-router.post('/documento',auth(),  (req, res, next) => {
+router.post('/documento',  (req, res, next) => {
   uploadDocumento(req, res, (error) => {
     if (error) {
       if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
@@ -222,10 +222,10 @@ router.post('/documento',auth(),  (req, res, next) => {
 });
 
 
-router.get('/documento/:external_id', auth(),documentoController.obtener);
-router.get('/documento/one/:external_id', auth(),documentoController.obtenerOneDoc);
-router.delete('/documento/:external_id',auth(), documentoController.eliminar);
-router.get('/documento/entidad/:id_entidad/:nombre',auth(), documentoController.exist);
+router.get('/documento/:external_id',documentoController.obtener);
+router.get('/documento/one/:external_id',documentoController.obtenerOneDoc);
+router.delete('/documento/:external_id', documentoController.eliminar);
+router.get('/documento/entidad/:id_entidad/:nombre', documentoController.exist);
 
 router.get('/audio/descargar/:filename', (req, res) => {
   const filePath = path.join(__dirname, '../public/audio/completo/', req.params.filename); 
@@ -250,7 +250,7 @@ router.get('/docx/descargar/:filename', (req, res) => {
 });
 
 
-router.put('/modificar/entidad', auth(),(req, res, next) => {
+router.put('/modificar/entidad',(req, res, next) => {
   uploadFotoPersona.single('foto')(req, res, (error) => {
     if (error) {
       if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
@@ -267,24 +267,24 @@ router.put('/modificar/entidad', auth(),(req, res, next) => {
     entidadController.modificar(req, res, next);
   });
 });
-router.get('/listar/entidad', auth({ checkAdmin: true }),  entidadController.listar);
-router.get('/listar/entidad/activos',  auth({ checkAdmin: true }), entidadController.listarActivos);
-router.get('/obtener/entidad/:external', auth(), entidadController.obtener);
+router.get('/listar/entidad',  entidadController.listar);
+router.get('/listar/entidad/activos', entidadController.listarActivos);
+router.get('/obtener/entidad/:external', entidadController.obtener);
 
-router.get('/cuenta/:nombreCompleto',auth(),cuentaController.obtenerCuenta);
+router.get('/cuenta/:nombreCompleto',cuentaController.obtenerCuenta);
 
 
 /** ROL_ENTIDAD */
-router.get('/rol/entidad/listar', auth(),rolEntidadController.listar);
-router.post('/asignar/lideres',  auth({ checkAdmin: true }), rolEntidadController.asignarLideres);
+router.get('/rol/entidad/listar',rolEntidadController.listar);
+router.post('/asignar/lideres', rolEntidadController.asignarLideres);
 router.get('/rol/entidad/obtener/lider', rolEntidadController.obtenerLider);
-router.get('/rol/entidad/obtener/administrador',  auth({ checkAdmin: true }), rolEntidadController.obtenerAdministrador);
+router.get('/rol/entidad/obtener/administrador', rolEntidadController.obtenerAdministrador);
 
 /*    AUDIO  */
-router.put('/audio/:external_id', auth(),audioController.guardar);
-router.get('/audio/:external_id',auth(), audioController.obtener);
+router.put('/audio/:external_id',audioController.guardar);
+router.get('/audio/:external_id', audioController.obtener);
 /* CAMBIO CLAVE */
-router.put('/cuenta/clave/:external_id',auth(), [
+router.put('/cuenta/clave/:external_id', [
   body('clave_vieja', 'Ingrese una clave valido').exists().not().isEmpty(),
   body('clave_nueva', 'Ingrese una clave valido').exists().not().isEmpty()
 ], cuentaController.cambioClave)

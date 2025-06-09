@@ -30,13 +30,13 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/olvidar/clave' element={<OlvidoClave />} />
         <Route path='/cambio/clave/restablecer/:external_id/:token' element={<CambioClave />} />
-        <Route path='/peticiones/clave' element={<MiddewareSesion><VerPeticionesClave /></MiddewareSesion>} />
-        <Route path='/cambio/clave' element={<MiddewareSesion><CambioClave /></MiddewareSesion>} />
-        <Route path='/extraer/:external_id' element={<MiddewareSesion><Extractor /> </MiddewareSesion>} />
-        <Route path='/perfil' element={<MiddewareSesion><Perfil /></MiddewareSesion>} />
-        <Route path='/dashboard' element={<MiddewareSesion><Dashboard /></MiddewareSesion>} />
-        <Route path='/contactanos' element={<MiddewareSesion><SobreNosotros/></MiddewareSesion>} />
-        <Route path='/configuracion' element={<MiddewareSesion><ConfiguracionGlobal/></MiddewareSesion>} />
+        <Route path='/peticiones/clave' element={<VerPeticionesClave />} />
+        <Route path='/cambio/clave' element={<CambioClave />} />
+        <Route path='/extraer/:external_id' element={<Extractor /> } />
+        <Route path='/perfil' element={<Perfil />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/contactanos' element={<SobreNosotros/>} />
+        <Route path='/configuracion' element={<ConfiguracionGlobal/>} />
       </Routes>
   );
 } 

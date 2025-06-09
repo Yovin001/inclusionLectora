@@ -16,8 +16,8 @@ const MenuBar = () => {
     useEffect(() => {
         const usuario = getUser();
         if (usuario) {
-            setFotoUsuario(usuario.user.foto);
-            setIdRol(getRolApi());
+            setFotoUsuario("USUARIO_ICONO.png");
+            setIdRol('1');
         }
     }, []);
 
@@ -47,7 +47,7 @@ const MenuBar = () => {
                         style={{ cursor: 'pointer' }}
                     />
                 </div>
-                {token && (
+             
                     <Dropdown align="end" className="navbar-user-dropdown">
                         <Dropdown.Toggle
                             variant="link"
@@ -57,7 +57,7 @@ const MenuBar = () => {
                             aria-haspopup="true"
                         >
                             <img
-                                src={`${URLBASE}images/users/${fotoUsuario}`}
+                                src={`${URLBASE}/images/users/USUARIO_ICONO.png`}
                                 alt={`Foto de perfil de ${getUser()?.user?.nombre || 'usuario'}`}
                                 className="user-avatar"
                             />
@@ -80,18 +80,18 @@ const MenuBar = () => {
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                )}
+              
             </nav>
 
             {/* Segundo renglón: botones de navegación */}
-            {token && (
+        
                 <nav
                     className={`custom-navbar-secondary ${menuOpen ? 'open' : ''}`}
                     role="navigation"
                     aria-label="Menú de navegación principal"
                 >
                     <div className="navbar-center">
-                        {idRol === '1' && (
+                    
                             <Button
                                 as="button"
                                 onClick={() => navigate('/configuracion')}
@@ -100,7 +100,7 @@ const MenuBar = () => {
                             >
                                 Configuraciones
                             </Button>
-                        )}
+                      
                         <Button
                             as="button"
                             onClick={() => {
@@ -131,7 +131,7 @@ const MenuBar = () => {
                         </Button>
                     </div>
                 </nav>
-            )}
+         
         </>
     );
 };

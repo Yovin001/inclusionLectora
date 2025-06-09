@@ -19,16 +19,11 @@ const Dashboard = () => {
 
     const cargarDocumentos = () => {
         setLoading(true);
-        peticionGet(getToken(), `documento/${getUser().user.id}`)
+        peticionGet(getToken(), `documento/1`)
             .then((info) => {
                 if (info.code === 200) {
                     setDocumentos(info.info);
-                } else if (
-                    info.msg.toLowerCase().includes("token")
-                ) {
-                    borrarSesion();
-                    navigate('/login');
-                }
+                } 
                 
             })
             .catch((error) => {
@@ -41,7 +36,7 @@ const Dashboard = () => {
     };
 
     const eliminarDocumento = (docId) => {
-        peticionDelete(getToken(), `documento/${docId}`)
+        peticionDelete(getToken(), `documento/1`)
             .then((info) => {
                 if (info.code === 200) {
                     mensajesSinRecargar('Documento eliminado con éxito', 'success', 'Éxito');

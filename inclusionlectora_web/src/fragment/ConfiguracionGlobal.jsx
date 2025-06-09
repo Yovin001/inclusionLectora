@@ -24,13 +24,7 @@ const ConfiguracionGlobal = () => {
       if (info.code === 200) {
         setTamano(info.info);
         setNuevoTamano(info.info);
-      } else if (
-        info.msg.toLowerCase().includes('token') ||
-        info.msg === 'Acceso denegado: No tiene permisos de administrador'
-      ) {
-        borrarSesion();
-        navigate('/login');
-      }
+      } 
     });
   }, [navigate]);
 
