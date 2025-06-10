@@ -79,10 +79,10 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
   const proceedWithUpload = async () => {
     setLoading(true);
     setSubmitted(true);
-    playSound('/lecyov/audio/cargando.mp3');
+    playSound('/audio/cargando.mp3');
 
     beepInterval.current = setInterval(() => {
-      playSound('/lecyov/audio/beepbeepbeep-53921.mp3');
+      playSound('/audio/beepbeepbeep-53921.mp3');
     }, 5000);
 
     const formData = new FormData();
