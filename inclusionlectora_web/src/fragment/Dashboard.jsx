@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Modal, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, Modal, FormControl, InputGroup, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { peticionGet, peticionDelete } from '../utilities/hooks/Conexion';
 import { borrarSesion, getToken, getUser } from '../utilities/Sessionutil';
-import {mensajesSinRecargar}  from '../utilities/Mensajes';
+import { mensajesSinRecargar } from '../utilities/Mensajes';
 import MenuBar from './MenuBar';
 import { useNavigate } from 'react-router-dom';
 import '../css/style.css';
@@ -29,7 +29,7 @@ const Dashboard = () => {
                     borrarSesion();
                     navigate('/login');
                 }
-                
+
             })
             .catch((error) => {
                 console.error('Error al cargar documentos:', error);
@@ -84,20 +84,22 @@ const Dashboard = () => {
                         <Button className='btn-normal' onClick={handleShowUploadModal}>
                             <FontAwesomeIcon icon={faPlus} aria-label="Cargar documento" /> Cargar documento
                         </Button>
-                       
+
                     </div>
-                    <p className='titulo-primario'>Lista de Documentos</p>
+                    <h1 className='titulo-primario'>Lista de Documentos</h1> {/* ✅ encabezado principal */}
+                    <Form.Label htmlFor="busqueda-documentos" className="visually-hidden">Buscar documentos</Form.Label>
                     <InputGroup className='mb-3'>
                         <InputGroup.Text>
-                            <FontAwesomeIcon icon={faSearch} aria-label="Buscar" />
+                            <FontAwesomeIcon icon={faSearch} aria-hidden="true" />
                         </InputGroup.Text>
                         <FormControl
+                            id="busqueda-documentos"
                             placeholder='Buscar por: Título'
                             value={searchTerm}
                             onChange={handleSearchChange}
-                            aria-label="Campo de búsqueda de documentos"
                         />
                     </InputGroup>
+
 
                     <section className="document-grid ">
                         {loading ? (
