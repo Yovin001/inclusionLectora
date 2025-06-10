@@ -10,55 +10,55 @@ const AudioPlayer = ({ audioComplete, audioName, external_id }) => {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [lastPlaybackTime, setLastPlaybackTime] = useState(0);
 
-useEffect(() => {
-  if (external_id && external_id !== "new") {
-    peticionGet(getToken(), `audio/${external_id}`)
-      .then((info) => {
-        if (info.code === 200 && info.info.tiempo_reproduccion) {
-          setLastPlaybackTime(parseFloat(info.info.tiempo_reproduccion));
-        }
-      })
-      .catch((err) => {
-        console.error("Error al obtener el tiempo de reproducción:", err);
-      });
-  }
-}, [external_id]);
+  useEffect(() => {
+    if (external_id && external_id !== "new") {
+      peticionGet(getToken(), `audio/${external_id}`)
+        .then((info) => {
+          if (info.code === 200 && info.info.tiempo_reproduccion) {
+            setLastPlaybackTime(parseFloat(info.info.tiempo_reproduccion));
+          }
+        })
+        .catch((err) => {
+          console.error("Error al obtener el tiempo de reproducción:", err);
+        });
+    }
+  }, [external_id]);
 
-useEffect(() => {
+  useEffect(() => {
     if (audioRef.current && lastPlaybackTime > 0) {
-        audioRef.current.currentTime = lastPlaybackTime;
+      audioRef.current.currentTime = lastPlaybackTime;
     }
-}, [audioComplete, lastPlaybackTime]);
+  }, [audioComplete, lastPlaybackTime]);
 
-useEffect(() => {
-  if (!audioComplete) return;
+  useEffect(() => {
+    if (!audioComplete) return;
 
-  const intervalId = setInterval(() => {
-    // Solo guardar si el audio se está reproduciendo
-    if (audioRef.current && !audioRef.current.paused) {
-      savePlaybackTime();
-    }
-  }, 10000);
+    const intervalId = setInterval(() => {
+      // Solo guardar si el audio se está reproduciendo
+      if (audioRef.current && !audioRef.current.paused) {
+        savePlaybackTime();
+      }
+    }, 10000);
 
-  return () => clearInterval(intervalId);
-}, [audioComplete, audioRef, external_id]);
+    return () => clearInterval(intervalId);
+  }, [audioComplete, audioRef, external_id]);
 
 
-useEffect(() => {
-  const audio = audioRef.current;
-  if (!audio) return;
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const handlePlay = () => setIsPlaying(true);
-  const handlePause = () => setIsPlaying(false);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
-  audio.addEventListener('play', handlePlay);
-  audio.addEventListener('pause', handlePause);
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
 
-  return () => {
-    audio.removeEventListener('play', handlePlay);
-    audio.removeEventListener('pause', handlePause);
-  };
-}, []);
+    return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+    };
+  }, []);
 
 
   const togglePlayPause = () => {
@@ -82,15 +82,14 @@ useEffect(() => {
   const savePlaybackTime = () => {
     const currentTime = audioRef.current.currentTime;
     const data = {
-        tiempo_reproduccion: currentTime
+      tiempo_reproduccion: currentTime
     };
     peticionPut(getToken(), `audio/${external_id}`, data);
-};
+  };
 
   return (
     <section className="extractor-audio-card" aria-labelledby="audio-title">
-      <h2 id="audio-title" tabIndex="0">{audioName || 'Reproductor de audio'}</h2>
-
+    <h2 id="audio-title" tabIndex="0">{audioName || 'Reproductor de audio'}</h2>
       <audio
         ref={audioRef}
         src={audioComplete}
@@ -122,11 +121,12 @@ useEffect(() => {
         >
           +10s
         </Button>
-        <select className='btn-normal mb-3'
+        <label htmlFor="playbackRate" className="sr-only">Velocidad de reproducción</label>
+        <select
+          className='btn-normal mb-3'
           id="playbackRate"
           onChange={changePlaybackRate}
           value={playbackRate}
-          aria-label="Seleccionar velocidad de reproducción"
         >
           <option value="0.25">x0.25</option>
           <option value="0.5">x0.50</option>
@@ -137,6 +137,7 @@ useEffect(() => {
           <option value="1.75">x1.75</option>
           <option value="2">x2</option>
         </select>
+
       </fieldset>
     </section>
 

@@ -31,7 +31,7 @@
   }
   
   .extractor-audio-card h2 {
-    color: #4CAF50;
+    color: var( --verde-claro);
     font-weight: bold;
     font-size: 1.5rem;
     margin-bottom: 1rem;
@@ -158,5 +158,16 @@
   
   .file-upload-input {
     display: none;
+  }
+  
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
   

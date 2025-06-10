@@ -45,7 +45,7 @@ const Extractor = () => {
         <MenuBar />
       </header>
       <main className="extractor-container" aria-labelledby="page-title">
-        <h1 id="page-title" className="visually-hidden">Extractor de Audios y Documentos</h1>
+        <h1 id="page-title" className="visually-hidden">Extractor de Audios y Reproducirlos</h1>
 
         {(!audioComplete && (!external_id || external_id === "new")) ? (
           <section aria-label="Subida de archivo de audio o documento">
@@ -57,7 +57,8 @@ const Extractor = () => {
           </section>
         ) : (
           <>
-            <section aria-label="Reproductor de Audio">
+
+            <section aria-labelledby="audio-section">
               <AudioPlayer
                 audioComplete={audioComplete}
                 audioName={audioName}
@@ -65,7 +66,8 @@ const Extractor = () => {
               />
             </section>
 
-            <section aria-label="Controles adicionales">
+            <section aria-labelledby="extras-section">
+              <h2 id="extras-section" className="sr-only">Controles adicionales</h2>
               <ExtrasControls
                 external_id={external_id}
                 audioName={audioName}
@@ -76,15 +78,19 @@ const Extractor = () => {
             </section>
 
             {showPdf && (
-              <section aria-label="Visualización del Documento PDF">
-                <iframe src={fileURL} title={`Documento PDF: ${audioName || 'sin título'}`}>
-                  {/* Mensaje alternativo para navegadores que no soportan iframe */}
+              <section aria-labelledby="pdf-section">
+                <h2 id="pdf-section" className="sr-only">Visualización del Documento PDF</h2>
+                <iframe
+                  src={fileURL}
+                  title={`Documento PDF: ${audioName || 'sin título'}`}
+                >
                   Este navegador no soporta la vista previa de documentos. Puedes descargar el PDF aquí:
                   <a href={fileURL} download>Descargar PDF</a>.
                 </iframe>
               </section>
             )}
           </>
+
         )}
       </main>
     </>
