@@ -27,7 +27,7 @@ services:
       context: ./inclusionlectora_web
       dockerfile: Dockerfile
     ports:
-      - "81:80"
+      - "80:80"
     depends_on:
       - backend
     networks:

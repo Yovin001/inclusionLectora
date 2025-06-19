@@ -12,7 +12,7 @@ import { Button } from 'react-bootstrap';
 
 const Login = () => {
     const navigate = useNavigate();
-    const { register, formState: { errors, isValid }, handleSubmit, watch } = useForm({ mode: 'onChange' });
+    const { register, formState: { errors, isValid }, handleSubmit, watch } = useForm({ mode: 'onBlur' });
     const [showPassword, setShowPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const correo = watch('correo');
@@ -52,7 +52,8 @@ const Login = () => {
     };
 
     return (
-        <main className="d-flex justify-content-center align-items-center vh-100 bg-light">
+        <main className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+
             <section 
                 className="p-5 rounded shadow login-form text-center" 
                 aria-labelledby="login-title"
@@ -119,11 +120,7 @@ const Login = () => {
                                     type={showPassword ? "text" : "password"}
                                     className={`form-control ${errors.clave ? 'is-invalid' : ''}`}
                                     {...register("clave", {
-                                        required: "Ingrese una contraseña",
-                                        minLength: {
-                                            value: 6,
-                                            message: "La contraseña debe tener al menos 6 caracteres"
-                                        }
+                                        required: "Ingrese una contraseña"
                                     })}
                                     aria-required="true"
                                     aria-invalid={errors.clave ? "true" : "false"}
@@ -160,9 +157,7 @@ const Login = () => {
 
                         <Button 
                             type="submit" 
-                            className="btn btn-login w-100 mb-3"
-                            disabled={!isValid || isSubmitting}
-                            aria-disabled={!isValid || isSubmitting}
+                            className="btn btn-login w-100 mb-3"                                
                         >
                             {isSubmitting ? 'Ingresando...' : 'Ingresar'}
                         </Button>

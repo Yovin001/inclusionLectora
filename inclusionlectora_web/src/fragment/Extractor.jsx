@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MenuBar from './MenuBar';
 import ExtractorUpload from './component/extractor/ExtractorUpload';
@@ -7,6 +7,8 @@ import ExtrasControls from './component/extractor/ExtrasControls';
 import { URLBASE, peticionGet } from '../utilities/hooks/Conexion';
 import { getToken } from '../utilities/Sessionutil';
 import { mensajesSinRecargar } from '../utilities/Mensajes';
+import LiveRegion from './component/skipToContent/LiveRegion';
+import SkipToContent from './component/skipToContent/SkipToContent';
 import '../css/Extractor_Style.css';
 
 const Extractor = () => {
@@ -16,7 +18,7 @@ const Extractor = () => {
   const [showPdf, setShowPdf] = useState(false);
   const { external_id } = useParams();
   const navigate = useNavigate();
-
+  const mainContentRef = useRef(null);
   useEffect(() => {
     if (external_id && external_id !== "new") {
       const audioPath = `${URLBASE}audio/completo/${external_id}.mp3`;
@@ -41,14 +43,28 @@ const Extractor = () => {
 
   return (
     <>
+     <SkipToContent 
+  targetId="main-content"
+  label={(!audioComplete && (!external_id || external_id === "new")) ? 
+    "Area de carga de PDF" : 
+    "Area de reproducción de audio"}
+/>
+      
+      <LiveRegion />
       <header>
         <MenuBar />
       </header>
-      <main className="extractor-container" aria-labelledby="page-title">
-        <h1 id="page-title" className="visually-hidden">Extractor de Audios y Reproducirlos</h1>
+      <main ref={mainContentRef}
+        id="main-content"
+        tabIndex="-1"
+        className="extractor-container" 
+        aria-labelledby="page-title">
+        <h1 id="page-title" className="visually-hidden">{(!audioComplete && (!external_id || external_id === "new")) ? 
+    "Cargar de PDF" : 
+    "Reproducir audio"}</h1>
 
         {(!audioComplete && (!external_id || external_id === "new")) ? (
-          <section aria-label="Subida de archivo de audio o documento">
+          <section aria-label="Subida de archivos pdf">
             <ExtractorUpload
               setFileURL={setFileURL}
               setAudioComplete={setAudioComplete}

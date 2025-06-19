@@ -42,7 +42,7 @@ const ExtrasControls = ({ external_id, audioName, fileURL, showPdf, setShowPdf }
       <Button
         type="button"
         className="verde"
-        aria-label={showPdf ? 'Ocultar vista del PDF' : 'Mostrar vista del PDF'}
+        aria-label={showPdf ? 'Ocultar PDF' : 'Mostrar PDF'}
         onClick={() => setShowPdf(!showPdf)}
       >
         {showPdf ? 'Ocultar PDF' : 'Ver PDF'}

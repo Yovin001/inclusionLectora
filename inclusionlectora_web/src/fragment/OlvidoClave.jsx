@@ -11,7 +11,7 @@ import { Button } from 'react-bootstrap';
 
 const OlvidoClave = () => {
     const { register, handleSubmit, watch, formState: { errors, isValid } } = useForm({
-        mode: 'onChange' // Para validar en tiempo real
+        mode: 'onBlur' // Para validar en tiempo real
     });
     const navigate = useNavigate();
     const correo = watch('correo'); // Observamos el campo de correo
@@ -32,8 +32,7 @@ const OlvidoClave = () => {
     };
 
     return (
-        <main 
-            className="d-flex justify-content-center align-items-center vh-100 bg-light"
+        <main className="d-flex justify-content-center align-items-center min-vh-100 bg-light"
             aria-labelledby="titulo-restablecer"
         >
             <section 
@@ -110,8 +109,6 @@ const OlvidoClave = () => {
                         <Button 
                             type="submit" 
                             className="btn btn-login w-100"
-                            disabled={!correo || !isValid}
-                            aria-disabled={!correo || !isValid}
                             aria-label="Enviar enlace de restablecimiento de contraseña"
                         >
                             Enviar enlace de restablecimiento

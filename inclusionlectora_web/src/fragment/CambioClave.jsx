@@ -11,22 +11,31 @@ import logoCarrera from '../img/LogoCarrera.png';
 import { Button } from 'react-bootstrap';
 
 const CambioClave = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+        mode: 'onBlur'
+    });
     const navigate = useNavigate();
     const { external_id, token } = useParams();
-    const [claveCoincide, setClaveCoincide] = useState(false);
-    const [mostrarClaveActual, setMostrarClaveActual] = useState(false);
-    const [mostrarClave, setMostrarClave] = useState(false);
-    const [mostrarConfirmarClave, setMostrarConfirmarClave] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordMatch, setPasswordMatch] = useState(null);
+    const [confirmTouched, setConfirmTouched] = useState(false);
 
     const nuevaClave = watch('nuevaClave');
-    const confirmarClave = watch('confirmarClave');
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     useEffect(() => {
-        setClaveCoincide(nuevaClave === confirmarClave && nuevaClave?.length > 0);
-    }, [nuevaClave, confirmarClave]);
+        setPasswordMatch(confirmPassword === nuevaClave);
+    }, [confirmPassword, nuevaClave]);
 
     const onSubmit = async (data) => {
+        if (!passwordMatch) {
+            setConfirmTouched(true); // Esto activará el mensaje de error que ya tienes
+            return;
+        }
         const datos = token && external_id
             ? { clave_nueva: data.nuevaClave }
             : { clave_vieja: data.claveActual, clave_nueva: data.nuevaClave };
@@ -70,24 +79,41 @@ const CambioClave = () => {
 
                         {!token || !external_id ? (
                             <div className="mb-3 text-start">
-                                <label htmlFor="claveActual" className="form-label">Contraseña Actual</label>
+                                <label htmlFor="claveActual" className="form-label">Contraseña Actual*</label>
                                 <div className="input-group">
                                     <input
-                                        type={mostrarClaveActual ? "text" : "password"}
-                                        className={`form-control ${errors.claveActual ? 'is-invalid' : ''}`}
                                         id="claveActual"
-                                        placeholder="Ingrese su contraseña actual"
-                                        {...register('claveActual', { required: 'La contraseña actual es obligatoria' })}
+                                        type={showPassword ? "text" : "password"}
+                                        className={`form-control ${errors.claveActual ? 'is-invalid' : ''}`}
+                                        {...register("claveActual", {
+                                            required: "La contraseña actual es obligatoria"
+                                        })}
+                                        aria-invalid={errors.claveActual ? "true" : "false"}
+                                        aria-required="true"
+                                        aria-describedby={errors.claveActual ? "claveActual-error" : undefined}
                                     />
                                     <button
                                         type="button"
                                         className="btn btn-outline-secondary"
-                                        onClick={() => setMostrarClaveActual(!mostrarClaveActual)}
+                                        onClick={togglePasswordVisibility}
+                                        aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                        aria-controls="claveActual"
+                                        aria-expanded={showPassword}
                                     >
-                                        <i className={`bi ${mostrarClaveActual ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                                        {showPassword ? (
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                            </svg>
+                                        ) : (
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
+                                                <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
+                                            </svg>
+                                        )}
                                     </button>
                                     {errors.claveActual && (
-                                        <div className="invalid-feedback">
+                                        <div id="claveActual-error" className="invalid-feedback" role="alert">
                                             {errors.claveActual.message}
                                         </div>
                                     )}
@@ -96,34 +122,49 @@ const CambioClave = () => {
                         ) : null}
 
                         <div className="mb-3 text-start">
-                            <label htmlFor="nuevaClave" className="form-label">Nueva Contraseña</label>
+                            <label htmlFor="nuevaClave" className="form-label">Nueva Contraseña*</label>
                             <div className="input-group">
                                 <input
-                                    type={mostrarClave ? "text" : "password"}
-                                    className={`form-control ${errors.nuevaClave ? 'is-invalid' : ''}`}
                                     id="nuevaClave"
-                                    placeholder="Ingrese su nueva contraseña"
-                                    {...register('nuevaClave', {
+                                    type={showPassword ? "text" : "password"}
+                                    className={`form-control ${errors.nuevaClave ? 'is-invalid' : ''}`}
+                                    {...register("nuevaClave", {
                                         required: "Ingrese una contraseña",
                                         minLength: {
                                             value: 5,
-                                            message: "La contraseña debe tener al menos 5 caracteres"
+                                            message: "Mínimo 5 caracteres"
                                         },
                                         pattern: {
                                             value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=[\]{}|\\:";'?/.,`~]+$/,
-                                            message: "Debe incluir al menos una letra, un número, y no usar < o >"
+                                            message: "Debe contener letras y números"
                                         }
                                     })}
+                                    aria-invalid={errors.nuevaClave ? "true" : "false"}
+                                    aria-required="true"
+                                    aria-describedby={errors.nuevaClave ? "nuevaClave-error" : undefined}
                                 />
                                 <button
                                     type="button"
                                     className="btn btn-outline-secondary"
-                                    onClick={() => setMostrarClave(!mostrarClave)}
+                                    onClick={togglePasswordVisibility}
+                                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                    aria-controls="nuevaClave"
+                                    aria-expanded={showPassword}
                                 >
-                                    <i className={`bi ${mostrarClave ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                                    {showPassword ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                        </svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
+                                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
+                                        </svg>
+                                    )}
                                 </button>
                                 {errors.nuevaClave && (
-                                    <div className="invalid-feedback">
+                                    <div id="nuevaClave-error" className="invalid-feedback" role="alert">
                                         {errors.nuevaClave.message}
                                     </div>
                                 )}
@@ -131,42 +172,53 @@ const CambioClave = () => {
                         </div>
 
                         <div className="mb-3 text-start">
-                            <label htmlFor="confirmarClave" className="form-label">Confirmar Contraseña</label>
+                            <label htmlFor="confirmarClave" className="form-label">Confirmar Contraseña*</label>
                             <div className="input-group">
                                 <input
-                                    type={mostrarConfirmarClave ? "text" : "password"}
-                                    className={`form-control ${errors.confirmarClave ? 'is-invalid' : ''}`}
                                     id="confirmarClave"
-                                    placeholder="Confirme su nueva contraseña"
-                                    {...register('confirmarClave', {
-                                        required: "La confirmación de la contraseña es obligatoria",
-                                        validate: value => value === nuevaClave || "Las contraseñas no coinciden"
-                                    })}
+                                    type={showPassword ? "text" : "password"}
+                                    className={`form-control ${(confirmPassword && !passwordMatch) || (errors.nuevaClave && nuevaClave === '') ? 'is-invalid' : ''}`}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    onBlur={() => setConfirmTouched(true)}
+                                    aria-invalid={(confirmPassword && !passwordMatch) || (errors.nuevaClave && nuevaClave === '') ? "true" : "false"}
+                                    aria-required="true"
+                                    aria-describedby={
+                                        (confirmPassword && !passwordMatch)
+                                            ? "confirm-error"
+                                            : (errors.nuevaClave && nuevaClave === '')
+                                                ? "nuevaClave-valid-error"
+                                                : undefined
+                                    }
                                 />
-                                <button
-                                    type="button"
-                                    className="btn btn-outline-secondary"
-                                    onClick={() => setMostrarConfirmarClave(!mostrarConfirmarClave)}
-                                >
-                                    <i className={`bi ${mostrarConfirmarClave ? 'bi-eye-slash' : 'bi-eye'}`}></i>
-                                </button>
-                                {claveCoincide && (
-                                    <span className="input-group-text text-success">
-                                        <i className="bi bi-check-circle-fill"></i>
-                                    </span>
-                                )}
+                                <span className="input-group-text" aria-hidden="true">
+                                    {passwordMatch === null ? '' : passwordMatch ? '✔️' : '❌'}
+                                </span>
                             </div>
-                            {errors.confirmarClave && (
-                                <div className="invalid-feedback">
-                                    {errors.confirmarClave.message}
+
+                            <div className="visually-hidden" aria-live="polite" role="status">
+                                {
+                                    confirmPassword === '' ? '' :
+                                        passwordMatch === null ? '' :
+                                            passwordMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas no coinciden.'
+                                }
+                            </div>
+
+                            {(confirmPassword && !passwordMatch) && (
+                                <div id="confirm-error" className="invalid-feedback d-block" role="alert">
+                                    Las contraseñas no coinciden
+                                </div>
+                            )}
+                            {errors.nuevaClave && nuevaClave === '' && (
+                                <div id="nuevaClave-valid-error" className="invalid-feedback d-block" role="alert">
+                                    Primero ingrese una contraseña válida
                                 </div>
                             )}
                         </div>
 
-                        <Button 
-                            type="submit" 
+                        <Button
+                            type="submit"
                             className="btn btn-login w-100 mb-3"
-                            disabled={!claveCoincide}
                         >
                             Cambiar Contraseña
                         </Button>
@@ -177,7 +229,7 @@ const CambioClave = () => {
                                 className="btn btn-link"
                                 onClick={() => navigate('/login')}
                             >
-                                Volver al inicio de sesión
+                                Volver
                             </button>
                         </div>
                     </fieldset>

@@ -16,7 +16,7 @@ Modal.setAppElement('#root');
 
 const Registrar = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
-        mode: 'onChange'
+        mode: 'onBlur'
     });
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +24,7 @@ const Registrar = () => {
     const [passwordMatch, setPasswordMatch] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState({});
+    const [confirmTouched, setConfirmTouched] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -49,10 +50,9 @@ const Registrar = () => {
 
     const onSubmit = data => {
         if (!passwordMatch) {
-            mensajesSinRecargar('Las contraseñas no coinciden', 'error', 'Error');
+            setConfirmTouched(true); // Esto activará el mensaje de error que ya tienes
             return;
         }
-
         const formData = new FormData();
         formData.append('nombres', data.nombres.toUpperCase());
         formData.append('apellidos', data.apellidos.toUpperCase());
@@ -100,16 +100,7 @@ const Registrar = () => {
                     <h2 id="modal-title" className="modal-title">{modalContent.title}</h2>
                     <p id="modal-description" className="modal-description">{modalContent.text}</p>
                     <div className="modal-button-container">
-                        {modalContent.type === 'warning' && (
-                            <button
-                                onClick={closeModal}
-                                className="modal-button modal-button-cancel"
-                                aria-label="Cancelar operación de registro"
-                            >
-                                Cancelar
-                            </button>
-                        )}
-                        <button
+                    <button
                             onClick={() => {
                                 if (modalContent.onConfirm) modalContent.onConfirm();
                                 closeModal();
@@ -120,6 +111,16 @@ const Registrar = () => {
                         >
                             {modalContent.type === 'warning' ? 'Confirmar' : 'Aceptar'}
                         </button>
+                        {modalContent.type === 'warning' && (
+                            <button
+                                onClick={closeModal}
+                                className="modal-button modal-button-cancel"
+                                aria-label="Cancelar operación de registro"
+                            >
+                                Cancelar
+                            </button>
+                        )}
+                   
                     </div>
                 </Modal>
 
@@ -251,6 +252,9 @@ const Registrar = () => {
                                     aria-required="true"
                                     aria-describedby={errors.telefono ? "telefono-error" : undefined}
                                     inputMode="numeric"
+                                    onInput={(e) => {
+                                        e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Elimina todo lo que no sea número
+                                    }}
                                 />
                                 {errors.telefono && (
                                     <div id="telefono-error" className="invalid-feedback" role="alert">
@@ -258,6 +262,7 @@ const Registrar = () => {
                                     </div>
                                 )}
                             </div>
+
                         </div>
 
                         <div className="mb-3">
@@ -342,32 +347,49 @@ const Registrar = () => {
                                     <input
                                         id="confirmPassword"
                                         type={showPassword ? "text" : "password"}
-                                        className={`form-control ${(confirmPassword && !passwordMatch) ||
-                                                (errors.clave && watch('clave') === '') ? 'is-invalid' : ''
+                                        className={`form-control ${(confirmPassword && !passwordMatch) || (errors.clave && watch('clave') === '') ? 'is-invalid' : ''
                                             }`}
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
+                                        onBlur={() => setConfirmTouched(true)}
                                         aria-invalid={
-                                            (confirmPassword && !passwordMatch) ||
-                                                (errors.clave && watch('clave') === '') ? "true" : "false"
+                                            (confirmPassword && !passwordMatch) || (errors.clave && watch('clave') === '') ? "true" : "false"
                                         }
                                         aria-required="true"
                                         aria-describedby={
-                                            (confirmPassword && !passwordMatch) ||
-                                                (errors.clave && watch('clave') === '') ? "confirm-error" : undefined
+                                            (confirmPassword && !passwordMatch)
+                                                ? "confirm-error"
+                                                : (errors.clave && watch('clave') === '')
+                                                    ? "clave-valid-error"
+                                                    : undefined
                                         }
                                     />
                                     <span className="input-group-text" aria-hidden="true">
                                         {passwordMatch === null ? '' : passwordMatch ? '✔️' : '❌'}
                                     </span>
                                 </div>
+
+                                {/* Mensaje en vivo para lectores de pantalla */}
+                                <div
+                                    className="visually-hidden"
+                                    aria-live="polite"
+                                    role="status"
+                                >
+                                    {
+                                        confirmPassword === '' ? '' :
+                                            passwordMatch === null ? '' :
+                                                passwordMatch ? 'Las contraseñas coinciden.' : 'Las contraseñas no coinciden.'
+                                    }
+                                </div>
+
+                                {/* Mensaje de error visual y para lectores de pantalla */}
                                 {(confirmPassword && !passwordMatch) && (
                                     <div id="confirm-error" className="invalid-feedback d-block" role="alert">
                                         Las contraseñas no coinciden
                                     </div>
                                 )}
                                 {errors.clave && watch('clave') === '' && (
-                                    <div id="confirm-error" className="invalid-feedback d-block" role="alert">
+                                    <div id="clave-valid-error" className="invalid-feedback d-block" role="alert">
                                         Primero ingrese una contraseña válida
                                     </div>
                                 )}
@@ -376,18 +398,18 @@ const Registrar = () => {
 
                         <div className="d-flex justify-content-between mt-4">
                             <Button
-                                variant="outline-secondary"
-                                onClick={handleCancelClick}
-                                aria-label="Cancelar registro de usuario"
-                            >
-                                Cancelar
-                            </Button>
-                            <Button
                                 type="submit"
                                 className="btn-login"
                                 aria-label="Enviar formulario de registro"
                             >
                                 Registrarse
+                            </Button>
+                            <Button
+                                variant="outline-secondary"
+                                onClick={handleCancelClick}
+                                aria-label="Cancelar registro de usuario"
+                            >
+                                Cancelar
                             </Button>
                         </div>
                     </fieldset>

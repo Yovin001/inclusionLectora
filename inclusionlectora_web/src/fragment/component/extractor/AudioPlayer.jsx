@@ -112,7 +112,7 @@ const AudioPlayer = ({ audioComplete, audioName, external_id }) => {
           onClick={togglePlayPause}
           aria-label={isPlaying ? "Pausar audio" : "Reproducir audio"}
         >
-          {isPlaying ? 'Pausa' : 'Play'}
+          {isPlaying ? 'Pausar' : 'Reproducir'}
         </Button>
 
         <Button className='btn-normal mb-3'

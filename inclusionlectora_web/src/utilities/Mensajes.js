@@ -28,10 +28,11 @@ export const mensajes = (texto, type = 'success', title = 'OK') => {
     >
       <h2>{title}</h2>
       <p>{texto}</p>
-      <Button 
+      <Button
         onClick={handleClose}
         autoFocus
         className="modal-button"
+        aria-label={texto}
       >
         OK
       </Button>
@@ -60,10 +61,11 @@ export const mensajesSinRecargar = (texto, type = 'success', title = 'OK') => {
     >
       <h2>{title}</h2>
       <p>{texto}</p>
-      <Button 
+      <Button
         onClick={handleClose}
         autoFocus
-        className="btn btn-login w-100"
+        className="modal-button"
+        aria-label={texto}
       >
         OK
       </Button>

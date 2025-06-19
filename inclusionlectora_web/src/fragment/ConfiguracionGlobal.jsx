@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MenuBar from './MenuBar';
 import Modal from 'react-modal'; // Importar react-modal
 import { peticionGet, peticionPost } from '../utilities/hooks/Conexion';
@@ -7,6 +7,8 @@ import { borrarSesion, getToken } from '../utilities/Sessionutil';
 import { useNavigate } from 'react-router-dom';
 import '../css/ConfiguracionGlobal_Style.css';
 import '../css/ExtractorModal_Style.css';
+import LiveRegion from './component/skipToContent/LiveRegion';
+import SkipToContent from './component/skipToContent/SkipToContent';
 
 // Configurar el elemento root para accesibilidad
 Modal.setAppElement('#root');
@@ -18,6 +20,7 @@ const ConfiguracionGlobal = () => {
   const [clave, setClave] = useState('');
   const [claveError, setClaveError] = useState(false);
   const navigate = useNavigate();
+  const mainContentRef = useRef(null);
 
   useEffect(() => {
     peticionGet(getToken(), `config/tamano`).then((info) => {
@@ -41,11 +44,11 @@ const ConfiguracionGlobal = () => {
           setTamano(info.info);
           mensajesSinRecargar('Tamaño actualizado con éxito', 'success');
         } else {
-          mensajesSinRecargar(`Error al actualizar el tamaño: ${info.msg}`, 'error');
+          mensajesSinRecargar(`Error al actualizar el tamaño: ${info.msg}`, "error", "Error");
         }
       });
     } else {
-      mensajesSinRecargar('Ingrese un valor válido (entre 1 y 5 MB)', 'error');
+      mensajesSinRecargar('Ingrese un valor válido (entre 1 y 5 MB)', "error", "Error");
     }
   };
 
@@ -66,16 +69,26 @@ const ConfiguracionGlobal = () => {
       mensajesSinRecargar('Eliminación completada con éxito', 'success');
       setModalIsOpen(false);
     } else {
-      mensajesSinRecargar(`Error al eliminar documentos: ${response.msg}`, 'error');
+      mensajesSinRecargar(`Error al eliminar documentos: ${response.msg}`, "error", "Error");
     }
   };
 
   return (
     <>
+      <SkipToContent
+        targetId="main-content"
+        label="Configuraciones globales"
+      />
+
+      <LiveRegion />
       <header>
         <MenuBar />
       </header>
-      <main className="contenedor-centro">
+      <main ref={mainContentRef}
+        id="main-content"
+        tabIndex="-1"
+        aria-labelledby="page-title"
+        className="contenedor-centro">
         <section className="cconfig-container">
           <h1 className="titulo-primario" style={{ textAlign: 'center' }}>
             Configuraciones del Sistema
@@ -131,7 +144,7 @@ const ConfiguracionGlobal = () => {
           {/* Eliminación de documentos */}
           <section aria-labelledby="eliminar-titulo" className="config-card">
             <h2 id="eliminar-titulo">Eliminación de documentos</h2>
-            <div className="config-warning-box" role="alert">
+            <div className="config-warning-box" role="region" aria-live="polite">
               <p>Esta acción eliminará todos los archivos del sistema. Proceda con precaución.</p>
             </div>
             <div className="config-controls">
@@ -187,13 +200,7 @@ const ConfiguracionGlobal = () => {
             </p>
           )}
           <div className="modal-button-container">
-            <button
-              className="modal-button modal-button-cancel"
-              onClick={() => setModalIsOpen(false)}
-              aria-label="Cancelar eliminación"
-            >
-              Cancelar
-            </button>
+
             <button
               className="modal-button modal-button-confirm-warning"
               onClick={confirmarEliminacion}
@@ -201,6 +208,13 @@ const ConfiguracionGlobal = () => {
               aria-label="Confirmar eliminación de documentos"
             >
               Eliminar
+            </button>
+            <button
+              className="modal-button modal-button-cancel"
+              onClick={() => setModalIsOpen(false)}
+              aria-label="Cancelar eliminación"
+            >
+              Cancelar
             </button>
           </div>
         </Modal>

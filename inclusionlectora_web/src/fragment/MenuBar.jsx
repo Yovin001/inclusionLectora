@@ -108,9 +108,9 @@ const MenuBar = () => {
                                 setTimeout(() => navigate('/extraer/new'), 0); // redirige de inmediato
                             }}
                             className="nav-button"
-                            aria-label="Extraer contenido de PDF"
+                            aria-label="Cargar PDF"
                         >
-                            Extraer PDF
+                            Cargar PDF
                         </Button>
 
                         <Button

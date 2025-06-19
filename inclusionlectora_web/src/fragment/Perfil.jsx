@@ -1,16 +1,18 @@
 import '../css/Perfil_Style.css';
 import { getUser } from '../utilities/Sessionutil';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { URLBASE } from '../utilities/hooks/Conexion';
 import { useNavigate } from 'react-router-dom';
 import MenuBar from './MenuBar';
 import { Button } from 'react-bootstrap';
+import SkipToContent from './component/skipToContent/SkipToContent';
+import LiveRegion from './component/skipToContent/LiveRegion';
 
 const Perfil = () => {
     const usuario = getUser();
     const navigate = useNavigate();
     const [nombreUsuario, setNombreUsuario] = useState('');
-
+    const mainContentRef = useRef(null);
     useEffect(() => {
         if (usuario && usuario.user.nombres) {
             setNombreUsuario(usuario.user.nombres);
@@ -28,11 +30,20 @@ const Perfil = () => {
 
     return (
         <>
+            <SkipToContent
+                targetId="main-content"
+                label="Perfil "
+            />
+
+            <LiveRegion />
             <header>
                 <MenuBar />
             </header>
 
-            <main className="contenedor-centro" aria-labelledby="perfil-titulo">
+            <main ref={mainContentRef}
+                id="main-content"
+                tabIndex="-1"
+                className="contenedor-centro" aria-labelledby="perfil-titulo">
                 <h1 id="perfil-titulo" className="sr-only">Perfil de usuario</h1>
 
                 <section className="main-body">
@@ -59,7 +70,7 @@ const Perfil = () => {
                                 <Button
                                     className='azul'
                                     onClick={() => navigate('/cambio/clave')}
-                                    aria-label="Cambiar contraseña"
+                                    aria-label="Cambiar Clave"
                                 >
                                     Cambiar Clave
                                 </Button>
@@ -73,7 +84,7 @@ const Perfil = () => {
                                 <div className="row pt-1">
                                     <section className="col-md-6 col-12 mb-3">
                                         <h3>Correo electrónico</h3>
-                                        <p 
+                                        <p
                                             aria-label={`Correo electrónico: ${usuario.correo}`}
                                             className="text-break"
                                         >

@@ -138,3 +138,17 @@ body, html {
       padding: 30px;
   }
 }
+
+.login-form {
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.invalid-feedback {
+  display: block;
+  min-height: 1.25rem;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 100%;
+}
