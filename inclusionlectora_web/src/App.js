@@ -12,6 +12,7 @@ import { getToken } from './utilities/Sessionutil';
 import OlvidoClave from './fragment/OlvidoClave';
 import CambioClave from './fragment/CambioClave';
 import VerPeticionesClave from './fragment/VerPeticionesClave';
+import ProcesarImagen from './fragment/ProcesarImagen';
 
 function App() {
   const MiddewareSesion = ({ children }) => {
@@ -37,6 +38,7 @@ function App() {
         <Route path='/dashboard' element={<MiddewareSesion><Dashboard /></MiddewareSesion>} />
         <Route path='/contactanos' element={<MiddewareSesion><SobreNosotros/></MiddewareSesion>} />
         <Route path='/configuracion' element={<MiddewareSesion><ConfiguracionGlobal/></MiddewareSesion>} />
+        <Route path='/procesar' element={<MiddewareSesion><ProcesarImagen/></MiddewareSesion>} />
       </Routes>
   );
 } 

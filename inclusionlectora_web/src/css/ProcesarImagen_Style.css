@@ -1,0 +1,19 @@
+.procesar-card {
+    width: 100%;
+    max-width: 800px; /* Ajusta este valor según el diseño */
+    margin: 0 auto 2rem auto; /* Centrado horizontal */
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ccc;
+  }
+  
+  .contenedor-centro-procesar {
+    display: flex;
+    flex-direction: column;  /* ← ESTO es lo que falta */
+    justify-content: center;
+    align-items: center;      /* Opcional, para centrar horizontalmente */
+    margin: 100px 40px 0;
+    gap: 2rem;                /* Opcional, separa las tarjetas */
+  }
+  

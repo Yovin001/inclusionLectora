@@ -1,5 +1,5 @@
-const URL_BACKEND = "http://10.20.138.254:3007/api"
-export const URLBASE = "http://10.20.138.254:3007/"; 
+const URL_BACKEND = "http://192.168.0.101:3008/api"
+export const URLBASE = "http://192.168.0.101:3008/"; 
 
 export const loginpost = async (formData, URL) => {
     const headers = {
@@ -65,6 +65,23 @@ export const peticionPost = async (key, URL,data) => {
     })).json();
     return datos;
 }
+
+export const peticionPostFormData = async (key, URL, formData) => {
+    const headers = {
+        "x-api-token": key
+ };
+
+    const response = await fetch(`${URL_BACKEND}/${URL}`, {
+        method: "POST",
+        headers,
+        body: formData
+    });
+
+    const datos = await response.json();
+    return datos;
+};
+
+
 export const peticionPut = async (key, URL,data) => {
     const headers = {
         "Content-Type": "application/json",

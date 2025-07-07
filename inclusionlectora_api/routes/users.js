@@ -6,6 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 let maxFileSize = 3 * 1024 * 1024; // Inicialmente 2 MB
 const rateLimit = require('express-rate-limit');
+const upload = multer();
 
 const { body, validationResult,isDate } = require('express-validator');
 const RolController = require('../controls/RolController');
@@ -22,6 +23,8 @@ const AudioController = require("../controls/AudioController");
 var audioController = new AudioController();
 const PeticionController = require('../controls/PeticionController');
 const peticionController = new PeticionController();
+const IAController = require('../controls/IAController');
+const iAController = new IAController();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -302,6 +305,19 @@ router.put('/cuenta/solicitud/cambio/clave',[
 /** PETICION */
 router.get('/peticion/:tipo', peticionController.listarPeticiones);
 router.get('/aceptarechazar/peticiones/:external/:estado/:motivo_rechazo/:id_rechazador', /*auth,*/ peticionController.aceptarRechazar);
+
+
+/** IAController */
+router.post(
+  '/procesar',
+  [
+    upload.single('image'),
+    body('prompt', 'El prompt es opcional pero debe ser texto')
+      .optional()
+      .isString()
+  ],  iAController.procesarImagenConGemini
+);
+
 
 
 module.exports = router;  

@@ -112,7 +112,14 @@ const MenuBar = () => {
                         >
                             Cargar PDF
                         </Button>
-
+                        <Button
+                            as="button"
+                            onClick={() => navigate('/procesar')}
+                            className="nav-button"
+                            aria-label="Describir Imagen"
+                        >
+                            Describir Imagen
+                        </Button>
                         <Button
                             as="button"
                             onClick={() => navigate('/dashboard')}
