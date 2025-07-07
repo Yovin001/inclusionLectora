@@ -7,6 +7,7 @@ import SkipToContent from './component/skipToContent/SkipToContent';
 import LiveRegion from './component/skipToContent/LiveRegion';
 import { peticionPostFormData } from '../utilities/hooks/Conexion';
 import { getToken } from '../utilities/Sessionutil';
+import { mensajesSinRecargar } from '../utilities/Mensajes';
 
 const ProcesarImagen = () => {
     const mainContentRef = useRef(null);
