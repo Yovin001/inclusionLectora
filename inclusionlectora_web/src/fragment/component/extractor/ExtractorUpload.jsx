@@ -7,6 +7,8 @@ import '../../../css/ExtractorModal_Style.css';
 import { Button } from 'react-bootstrap';
 import { mensajesSinRecargar } from '../../../utilities/Mensajes';
 
+const BASE_PATH = '/lecyov';
+
 Modal.setAppElement('#root');
 
 const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
@@ -132,10 +134,10 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
   const proceedWithUpload = async () => {
     setLoading(true);
     setSubmitted(true);
-    playSound('/audio/cargando.mp3');
+    playSound(BASE_PATH+'/audio/cargando.mp3');
 
     beepInterval.current = setInterval(() => {
-      playSound('/audio/beepbeepbeep-53921.mp3');
+      playSound(BASE_PATH+'/audio/beepbeepbeep-53921.mp3');
     }, 5000);
 
     const formData = new FormData();
