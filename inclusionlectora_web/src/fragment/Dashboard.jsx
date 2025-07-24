@@ -19,6 +19,7 @@ import SkipToContent from './component/skipToContent/SkipToContent';
 Modal.setAppElement('#root');
 
 const Dashboard = () => {
+    const [isDeleting, setIsDeleting] = useState(false);
     const navigate = useNavigate();
     const [documentos, setDocumentos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -54,6 +55,9 @@ const Dashboard = () => {
     };
 
     const confirmarEliminacion = () => {
+        if (isDeleting || !documentoAEliminar) return;
+
+        setIsDeleting(true); // Bloquea otros clics
         if (documentoAEliminar) {
             peticionDelete(getToken(), `documento/${documentoAEliminar}`)
                 .then((info) => {
@@ -69,6 +73,7 @@ const Dashboard = () => {
                     mensajesSinRecargar('Error al eliminar el documento', 'error', 'Error');
                 })
                 .finally(() => {
+                    setIsDeleting(false); // Desbloquea
                     setModalIsOpen(false);
                     setDocumentoAEliminar(null);
                 });
@@ -197,18 +202,19 @@ const Dashboard = () => {
                 </p>
 
                 <div className="modal-button-container">
-
                     <button
                         className="modal-button modal-button-confirm-warning"
                         onClick={confirmarEliminacion}
                         aria-label="Confirmar eliminación de documento"
+                        disabled={isDeleting}
                     >
-                        Eliminar
+                        {isDeleting ? 'Eliminando...' : 'Eliminar'}
                     </button>
                     <button
                         className="modal-button modal-button-cancel"
                         onClick={() => setModalIsOpen(false)}
                         aria-label="Cancelar eliminación"
+                        disabled={isDeleting} // opcional: evitar cerrar durante proceso
                     >
                         Cancelar
                     </button>
