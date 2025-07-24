@@ -146,33 +146,29 @@ const ExtractorUpload = ({ setFileURL, setAudioComplete, navegation }) => {
     formData.append('id', getUser().user.id);
 
     try {
-      GuardarArchivos(formData, getToken(), "/documento")
-        .then((info) => {
-          if (info.code === 200) {
-            const nombreAudio = info.info.nombre;
-            setAudioComplete(`${URLBASE}audio/completo/${nombreAudio}.mp3`);
-            setLoading(false);
-            clearInterval(beepInterval.current);
-            navegation(`/extraer/${info.info}`);
-          } else {
-            mensajesSinRecargar(info.msg || 'Error inesperado', 'error', 'Error');
-            setLoading(false);
-            clearInterval(beepInterval.current);
-          }
-        })
-        .catch((error) => {
-          clearInterval(beepInterval.current);
-          setLoading(false);
-          if (error.response && error.response.status === 413) {
-            mensajesSinRecargar(error.response.msg, 'error', 'Error');
-          } else {
-            mensajesSinRecargar('Error al guardar el documento', 'error', 'Error');
-          }
-        });
+      const info = await GuardarArchivos(formData, getToken(), "/documento");
+    
+      if (info.code === 200) {
+        const nombreAudio = info.info.nombre;
+        setAudioComplete(`${URLBASE}audio/completo/${nombreAudio}.mp3`);
+        setLoading(false);
+        clearInterval(beepInterval.current);
+        navegation(`/extraer/${info.info}`);
+      } else {
+        mensajesSinRecargar(info.msg || 'Error inesperado', 'error', 'Error');
+        setLoading(false);
+        clearInterval(beepInterval.current);
+      }
+    
     } catch (error) {
       clearInterval(beepInterval.current);
       setLoading(false);
-      mensajesSinRecargar('Error al guardar el documento', 'error', 'Error');
+    
+      if (error.response && error.response.status === 413) {
+        mensajesSinRecargar(error.response.msg, 'error', 'Error');
+      } else {
+        mensajesSinRecargar('Error al guardar el documento', 'error', 'Error');
+      }
     }
     
   };
