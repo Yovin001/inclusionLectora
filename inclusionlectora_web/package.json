@@ -2,6 +2,7 @@
   
   "name": "inclusionlectora_web",
   "version": "1.0.2",
+  "homepage": "lecyov",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
