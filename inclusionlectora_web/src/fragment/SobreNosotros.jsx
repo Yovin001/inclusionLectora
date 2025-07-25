@@ -11,12 +11,14 @@ import { getToken } from '../utilities/Sessionutil';
 const SobreNosotros = () => {
   const mainContentRef = useRef(null);
   const [licencia, setLicencia] = useState(null);
+  const[nombreLicencia, setNombreLicencia] = useState("Licencia Inclusión Lectora");
   useEffect(() => {
 
     peticionGet(getToken(), `licencia`)
       .then((info) => {
         if (info.code === 200) {
           setLicencia(`${URLBASE}${info.info.rutaRelativa}`);
+          setNombreLicencia(info.info.nombreArchivo);
         } else {
           mensajesSinRecargar("No se encontró la licencia", 'error', 'Error');
         }
@@ -82,7 +84,7 @@ const SobreNosotros = () => {
                   rel="noopener noreferrer"
                   className="boton-ver-licencia"
                 >
-                  Ver Licencia (PDF)
+                  Ver Licencia ({nombreLicencia})
                 </a>
               </div>
             </section>
