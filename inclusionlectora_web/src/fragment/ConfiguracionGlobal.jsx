@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MenuBar from './MenuBar';
 import Modal from 'react-modal'; // Importar react-modal
-import { peticionGet, peticionPost } from '../utilities/hooks/Conexion';
+import { Button } from 'react-bootstrap';
+import { peticionGet, peticionPost, peticionPostFormData, URLBASE } from '../utilities/hooks/Conexion';
 import { mensajesSinRecargar } from '../utilities/Mensajes';
 import { borrarSesion, getToken } from '../utilities/Sessionutil';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,10 @@ const ConfiguracionGlobal = () => {
   const [clave, setClave] = useState('');
   const [claveError, setClaveError] = useState(false);
   const navigate = useNavigate();
+  const [mostrarCargaLicencia, setMostrarCargaLicencia] = useState(false);
   const mainContentRef = useRef(null);
+  const [licencia, setLicencia] = useState(null);
+  const [licenciaPath, setLicenciaPath] = useState(null);
 
   useEffect(() => {
     peticionGet(getToken(), `config/tamano`).then((info) => {
@@ -35,6 +39,17 @@ const ConfiguracionGlobal = () => {
         navigate('/login');
       }
     });
+      peticionGet(getToken(), `licencia`)
+          .then((info) => {
+            if (info.code === 200) {
+              setLicenciaPath(`${URLBASE}${info.info.rutaRelativa}`);
+            } else {
+              mensajesSinRecargar("No se encontró la licencia", 'error', 'Error');
+            }
+          })
+          .catch(() => {
+            mensajesSinRecargar("Error al buscar la licencia", 'error', 'Error');
+          });
   }, [navigate]);
 
   const handleActualizarTamano = () => {
@@ -51,6 +66,27 @@ const ConfiguracionGlobal = () => {
       mensajesSinRecargar('Ingrese un valor válido (entre 1 y 5 MB)', "error", "Error");
     }
   };
+     const handleGuardarLicencia = async () => {
+          if (!licencia) {
+              mensajesSinRecargar('No se ha seleccionado una licencia', 'error', 'Error');
+              return;
+          }
+          const formData = new FormData();
+          formData.append('licencia', licencia);
+  
+          try {
+              const data = await peticionPostFormData(getToken(), `licencia`, formData);
+              if (data.code === 200) {
+                  mensajesSinRecargar('Licencia guardada correctamente', 'success');
+                  setLicenciaPath(`${URLBASE}${data.info.rutaRelativa}`);
+                  setMostrarCargaLicencia(false);
+              } else {
+                 mensajesSinRecargar('Error al guardar la licencia', 'error', 'Error');
+              }
+          } catch (error) {
+              mensajesSinRecargar('Error al guardar la licencia', 'error', 'Error');
+          } 
+      };
 
   const handleEliminarTodos = () => {
     setClave('');
@@ -71,6 +107,9 @@ const ConfiguracionGlobal = () => {
     } else {
       mensajesSinRecargar(`Error al eliminar documentos: ${response.msg}`, "error", "Error");
     }
+  };
+  const handleCambiarLicencia = () => {
+    setMostrarCargaLicencia((prev) => !prev);
   };
 
   return (
@@ -129,14 +168,14 @@ const ConfiguracionGlobal = () => {
                 </span>
               </span>
               <div className="config-controls">
-                <button
+                <Button
                   type="button"
                   className="btn-config-verde"
                   onClick={handleActualizarTamano}
                   aria-label="Aplicar nuevo tamaño de archivo"
                 >
                   Cambiar tamaño
-                </button>
+                </Button>
               </div>
             </div>
           </section>
@@ -148,19 +187,127 @@ const ConfiguracionGlobal = () => {
               <p>Esta acción eliminará todos los archivos del sistema. Proceda con precaución.</p>
             </div>
             <div className="config-controls">
-              <button
+              <Button
                 className="btn-config-azul"
                 onClick={handleEliminarTodos}
                 aria-describedby="eliminar-advertencia"
                 aria-label="Iniciar proceso de eliminación de todos los documentos"
               >
                 Eliminar Archivos
-              </button>
+              </Button>
               <p id="eliminar-advertencia" className="sr-only">
                 Se abrirá un cuadro de diálogo para confirmar la clave antes de eliminar.
               </p>
             </div>
           </section>
+
+          {/* Licencia de la plataforma */}
+          <section aria-labelledby="licencia-titulo" className="config-card">
+            <h2 id="licencia-titulo">Licencia de la plataforma web</h2>
+
+            <div className="config-form-group">
+              {/* Mostrar botón Cambiar Licencia solo si NO está visible la zona de carga */}
+              {!mostrarCargaLicencia && (
+                <Button
+                  className="btn-config-azul"
+                  onClick={handleCambiarLicencia}
+                  aria-expanded={mostrarCargaLicencia}
+                  aria-controls="licencia-carga"
+                >
+                  Cambiar Licencia
+                </Button>
+              )}
+
+              {mostrarCargaLicencia && (
+                <div id="licencia-carga" className="config-subcard">
+                  <div
+                    className="file-upload-dropzone"
+                    onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const droppedFile = e.dataTransfer.files[0];
+                      if (droppedFile && droppedFile.type.startsWith("application/pdf")) {
+                        setLicencia(droppedFile);
+                      }
+                    }}
+                  >
+                    <label
+                      htmlFor="licencia-pdf"
+                      className="file-upload-label"
+                      tabIndex="0"
+                      role="button"
+                      aria-label="Seleccionar archivo PDF"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          document.getElementById('licencia-pdf').click();
+                        }
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById('licencia-pdf').click();
+                      }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true">
+                        <title>Ícono de nube con flecha de subida</title>
+                        <path d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z" />
+                        <path d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z" />
+                      </svg>
+                      {licencia ? `Licencia seleccionada: ${licencia.name}` : 'Arrastra y suelta o haz clic para subir licencia'}
+                    </label>
+
+
+                    <input
+                      id="licencia-pdf"
+                      type="file"
+                      accept="application/pdf"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        setLicencia(e.target.files[0]);
+                      }}
+                      aria-label="Subir licencia"
+                    />
+                  </div>
+
+                  {/* Botones: Subir y Cancelar */}
+                  <div className="d-flex justify-content-between mt-4">
+                    <Button
+                      className="btn-config-azul"
+                      onClick={handleGuardarLicencia}
+                      aria-label="Confirmar carga de nueva licencia"
+                    >
+                      Subir nueva licencia
+                    </Button>
+
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => setMostrarCargaLicencia(false)}
+                      aria-label="Cancelar carga de licencia"
+                    >
+                      Cancelar
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Siempre visible: Enlace a archivo actual */}
+              <span className="config-current-value" style={{ marginTop: '1rem' }}>
+                Archivo actual:{' '}
+                <a
+                  href={licenciaPath}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="boton-ver-licencia"
+                >
+                  Ver Licencia (PDF)
+                </a>
+              </span>
+            </div>
+          </section>
+
+
         </section>
 
         {/* Modal de confirmación */}
@@ -201,21 +348,21 @@ const ConfiguracionGlobal = () => {
           )}
           <div className="modal-button-container">
 
-            <button
+            <Button
               className="modal-button modal-button-confirm-warning"
               onClick={confirmarEliminacion}
               disabled={!clave.trim()}
               aria-label="Confirmar eliminación de documentos"
             >
               Eliminar
-            </button>
-            <button
+            </Button>
+            <Button
               className="modal-button modal-button-cancel"
               onClick={() => setModalIsOpen(false)}
               aria-label="Cancelar eliminación"
             >
               Cancelar
-            </button>
+            </Button>
           </div>
         </Modal>
       </main>

@@ -1,12 +1,31 @@
 // SobreNosotros.js
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../css/Sobre_Nosotros.css';
 import MenuBar from './MenuBar';
 import SkipToContent from './component/skipToContent/SkipToContent';
 import LiveRegion from './component/skipToContent/LiveRegion';
+import { peticionGet, URLBASE } from '../utilities/hooks/Conexion';
+import { mensajesSinRecargar } from '../utilities/Mensajes';
+import { getToken } from '../utilities/Sessionutil';
 
 const SobreNosotros = () => {
   const mainContentRef = useRef(null);
+  const [licencia, setLicencia] = useState(null);
+  useEffect(() => {
+
+    peticionGet(getToken(), `licencia`)
+      .then((info) => {
+        if (info.code === 200) {
+          setLicencia(`${URLBASE}${info.info.rutaRelativa}`);
+        } else {
+          mensajesSinRecargar("No se encontró la licencia", 'error', 'Error');
+        }
+      })
+      .catch(() => {
+        mensajesSinRecargar("Error al buscar la licencia", 'error', 'Error');
+      });
+
+  });
   return (
     <>
       <SkipToContent
@@ -53,6 +72,21 @@ const SobreNosotros = () => {
               </ul>
             </div>
           </section>
+          {licencia && (
+            <section className="equipo">
+              <div className="contenedor">
+                <h2 className="titulo-secundario">Licencia</h2>
+                <a
+                  href={licencia}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="boton-ver-licencia"
+                >
+                  Ver Licencia (PDF)
+                </a>
+              </div>
+            </section>
+          )}
         </div>
       </main>
       <footer className="footer">

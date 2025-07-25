@@ -5,6 +5,7 @@ const gtts = require('gtts');
 const { exec } = require('child_process');
 const models = require('../models');
 const { PythonShell } = require('python-shell');
+const { info } = require('console');
 
 const docxExpirations = new Map(); 
 
@@ -98,6 +99,59 @@ function programarEliminacion(filePath, tiempoMs = 1 * 60 * 1000) {
 }
 
 class DocumentoController {
+
+
+    async guardarLicencia(req, res) {
+        try {
+          const file = req.file;
+      
+          if (!file) {
+            return res.status(400).json({ msg: "No se ha proporcionado un archivo", code: 400 });
+          }
+          const rutaRelativa = `licencia/${file.filename}`;
+          // En este punto el archivo ya fue guardado por multer, solo limpiamos lo anterior
+          return res.status(200).json({
+            msg: "Licencia guardada correctamente",
+            code: 200, info: { rutaRelativa, nombreArchivo: file.filename }
+          });
+      
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ msg: "Error al guardar la licencia", error: error.message });
+        }
+      }
+
+      async obtenerLicencia(req, res) {
+        try {
+          const carpetaLicencias = path.join(__dirname, '..', 'public', 'licencia');
+      
+          // Verificar que la carpeta existe
+          if (!fs.existsSync(carpetaLicencias)) {
+            return res.status(404).json({ msg: 'No se encontró la carpeta de licencias', code: 404 });
+          }
+      
+          const archivos = fs.readdirSync(carpetaLicencias);
+      
+          // Verifica si hay al menos un archivo
+          if (archivos.length === 0) {
+            return res.status(404).json({ msg: 'No hay ninguna licencia guardada', code: 404 });
+          }
+      
+          const nombreArchivo = archivos[0]; 
+          const rutaRelativa = `licencia/${nombreArchivo}`;
+      
+          return res.status(200).json({
+            msg: 'Licencia encontrada',
+            code: 200, 
+            info: {rutaRelativa, nombreArchivo}
+          });
+      
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ msg: 'Error al obtener la licencia', error: error.message });
+        }
+      }
+
 
     async convertirPdfADocx(req, res) {
         try {

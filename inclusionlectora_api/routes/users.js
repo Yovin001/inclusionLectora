@@ -1,3 +1,4 @@
+const fs = require('fs');
 var express = require('express');
 var router = express.Router();
 let jwt = require('jsonwebtoken');
@@ -90,14 +91,20 @@ const auth = (options = { checkAdmin: false }) => async (req, res, next) => {
 // GUARDAR IMAGENES 
 
 // Función para crear configuraciones de almacenamiento de multer
-const createStorage = (folderPath) => {
+
+const createStorage = (folderPath, renombrar = true) => {
   return multer.diskStorage({
     destination: path.join(__dirname, folderPath),
     filename: (req, file, cb) => {
-      console.log(file);
-      const parts = file.originalname.split('.');
-      const extension = parts[parts.length - 1];
-      cb(null, uuid.v4() + "." + extension);
+      if (renombrar) {
+        const parts = file.originalname.split('.');
+        const extension = parts[parts.length - 1];
+        cb(null, uuid.v4() + "." + extension);
+      } else {
+        // Limpieza opcional del nombre original para evitar problemas
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        cb(null, safeName);
+      }
     }
   });
 };
@@ -144,6 +151,22 @@ const uploadDocumento = (req, res, next) => {
     fileFilter: extensionesAceptadasDocumentos,
     limits: { fileSize: maxFileSize }, // Lee el tamaño actual de maxFileSize
   }).single('documento');
+  upload(req, res, next);
+};
+const uploadLicencia= (req, res, next) => {
+   const carpetaLicencias = path.join(__dirname, '..', 'public', 'licencia');
+  const archivos = fs.readdirSync(carpetaLicencias);
+          for (const archivo of archivos) {
+            const ruta = path.join(carpetaLicencias, archivo);
+            fs.unlinkSync(ruta);
+          }
+
+  const storage = createStorage('../public/licencia', false);
+  const upload = multer({
+    storage: storage,
+    fileFilter: extensionesAceptadasDocumentos,
+    limits: { fileSize: maxFileSize }, // Lee el tamaño actual de maxFileSize
+  }).single('licencia');
   upload(req, res, next);
 };
 
@@ -251,6 +274,25 @@ router.get('/docx/descargar/:filename', (req, res) => {
       }
   });
 });
+//licencias
+router.post('/licencia', (req, res, next) => {
+  uploadLicencia(req, res, (error) => {
+    if (error) {
+      if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({
+          msg: `El archivo es demasiado grande. Por favor, sube un archivo de menos de ${maxFileSize / (1024 * 1024)} MB.`,
+          code: 413,
+        });
+      }
+      return res.status(400).json({
+        msg: "Error al cargar el archivo: " + error.message,
+        code: 400,
+      });
+    }
+    documentoController.guardarLicencia(req, res, next);
+  });
+});
+router.get('/licencia', auth(),documentoController.obtenerLicencia);
 
 
 router.put('/modificar/entidad', auth(),(req, res, next) => {
