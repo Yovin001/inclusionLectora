@@ -25,7 +25,7 @@ function App() {
   };
 
   return (
-      <Routes>
+      <Routes >
         <Route path='*' element={ <Navigate to='/login' />} />
         <Route path='/registrar' element={<Registrar />} />
         <Route path='/login' element={<Login />} />

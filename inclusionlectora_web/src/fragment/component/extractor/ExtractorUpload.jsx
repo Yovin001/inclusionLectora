@@ -7,7 +7,7 @@ import '../../../css/ExtractorModal_Style.css';
 import { Button } from 'react-bootstrap';
 import { mensajesSinRecargar } from '../../../utilities/Mensajes';
 
-const BASE_PATH = '/lecyov';
+const BASE_PATH = '';
 
 Modal.setAppElement('#root');
 
